@@ -2,6 +2,7 @@ package com.example.smartflow
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -20,7 +21,8 @@ class LoginActivity : AppCompatActivity() {
 
     // URL de tu API - CAMBIA ESTA URL por la de tu servidor
     // private val API_BASE_URL = "http://10.0.2.2:3000/api" // Para emulador Android
-    private val API_BASE_URL = "http://192.168.1.8:3000/api" // Para dispositivo físico
+    // private val API_BASE_URL = "http://192.168.1.8:3000/api" // Para dispositivo físico
+    private val API_BASE_URL = "https://smartflow-mwmm.onrender.com/api" // Para producción en Render
     private val LOGIN_ENDPOINT = "$API_BASE_URL/auth/login"
 
     private lateinit var requestQueue: RequestQueue
@@ -70,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
                     val message = response.getString("message")
                     val token = response.getString("token")
                     val user = response.getJSONObject("user")
+                    val userRole = user.getString("rol_user")
 
                     // Guardar token y datos del usuario
                     saveUserData(token, user)
@@ -80,10 +83,8 @@ class LoginActivity : AppCompatActivity() {
                     // Ocultar mensaje de error
                     tvLoginError.visibility = TextView.GONE
 
-                    // Ir a MainActivity
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    // Redirigir según el rol del usuario
+                    redirectUserByRole(userRole)
 
                 } catch (e: Exception) {
                     Log.e("LoginActivity", "Error parsing response", e)
@@ -129,5 +130,48 @@ class LoginActivity : AppCompatActivity() {
     fun getAuthToken(): String? {
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("auth_token", null)
+    }
+
+    // Función para obtener el rol del usuario guardado
+    fun getUserRole(): String? {
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("user_role", null)
+    }
+
+    // Función para verificar si hay una sesión activa
+    fun isUserLoggedIn(): Boolean {
+        val token = getAuthToken()
+        val role = getUserRole()
+        return !token.isNullOrEmpty() && !role.isNullOrEmpty()
+    }
+
+    // Función para redirigir según el rol del usuario
+    private fun redirectUserByRole(userRole: String) {
+        when (userRole) {
+            "Empleado" -> {
+                // Empleados van a la app móvil - MainEmpleado
+                Toast.makeText(this, "Bienvenido Empleado", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, MainEmpleadoActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            "Auditor" -> {
+                // Auditores van a la app móvil - MainAuditor
+                Toast.makeText(this, "Bienvenido Auditor", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, MainAuditorActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            else -> {
+                // Rol no reconocido - ir a actividad por defecto
+                Toast.makeText(this, "Rol de usuario no reconocido", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
     }
 }
