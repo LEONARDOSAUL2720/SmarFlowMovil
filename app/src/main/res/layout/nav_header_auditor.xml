@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/lavanda_suave"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/img_user"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_person"
+        android:contentDescription="@string/user_image"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/circle_bg"
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre del Auditor"
+        android:textColor="@color/gris_oscuro"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/tv_user_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¡Bienvenido, auditor!"
+        android:textColor="@color/gris_oscuro"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp" />
+
+</LinearLayout>
+

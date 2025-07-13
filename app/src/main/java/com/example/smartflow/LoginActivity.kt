@@ -21,8 +21,8 @@ class LoginActivity : AppCompatActivity() {
 
     // URL de tu API - CAMBIA ESTA URL por la de tu servidor
     // private val API_BASE_URL = "http://10.0.2.2:3000/api" // Para emulador Android
-    // private val API_BASE_URL = "http://192.168.1.8:3000/api" // Para dispositivo físico
-    private val API_BASE_URL = "https://smartflow-mwmm.onrender.com/api" // Para producción en Render
+     private val API_BASE_URL = "http://192.168.1.13:3000/api" // Para dispositivo físico
+    //private val API_BASE_URL = "https://smartflow-mwmm.onrender.com/api" // Para producción en Render
     private val LOGIN_ENDPOINT = "$API_BASE_URL/auth/login"
 
     private lateinit var requestQueue: RequestQueue
@@ -73,6 +73,7 @@ class LoginActivity : AppCompatActivity() {
                     val token = response.getString("token")
                     val user = response.getJSONObject("user")
                     val userRole = user.getString("rol_user")
+                    val userName = user.getString("name_user") // Obtener el nombre del usuario
 
                     // Guardar token y datos del usuario
                     saveUserData(token, user)
@@ -84,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
                     tvLoginError.visibility = TextView.GONE
 
                     // Redirigir según el rol del usuario
-                    redirectUserByRole(userRole)
+                    redirectUserByRole(userRole, userName) // Pasar el nombre del usuario
 
                 } catch (e: Exception) {
                     Log.e("LoginActivity", "Error parsing response", e)
@@ -146,13 +147,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // Función para redirigir según el rol del usuario
-    private fun redirectUserByRole(userRole: String) {
+    private fun redirectUserByRole(userRole: String, userName: String) {
         when (userRole) {
             "Empleado" -> {
                 // Empleados van a la app móvil - MainEmpleado
                 Toast.makeText(this, "Bienvenido Empleado", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(this, MainEmpleadoActivity::class.java)
+                intent.putExtra("USER_NAME", userName) // Pasar el nombre del usuario
                 startActivity(intent)
                 finish()
             }
@@ -161,6 +163,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Bienvenido Auditor", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(this, MainAuditorActivity::class.java)
+                intent.putExtra("USER_NAME", userName) // Pasar el nombre del usuario
                 startActivity(intent)
                 finish()
             }
