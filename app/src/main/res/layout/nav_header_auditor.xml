@@ -1,40 +1,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@color/lavanda_suave"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:gravity="center_vertical">
 
+    <!-- Imagen grande a la izquierda -->
     <ImageView
         android:id="@+id/img_user"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:src="@drawable/ic_person"
-        android:contentDescription="@string/user_image"
-        android:layout_gravity="center_horizontal"
+        android:layout_width="111dp"
+        android:layout_height="113dp"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/circle_bg"
-        android:padding="8dp" />
+        android:contentDescription="@string/user_image"
+        android:padding="8dp"
+        android:src="@drawable/ic_person" />
 
-    <TextView
-        android:id="@+id/tv_user_name"
-        android:layout_width="wrap_content"
+    <!-- Info a la derecha -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Nombre del Auditor"
-        android:textColor="@color/gris_oscuro"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_marginTop="8dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_marginStart="16dp">
 
-    <TextView
-        android:id="@+id/tv_user_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="¡Bienvenido, auditor!"
-        android:textColor="@color/gris_oscuro"
-        android:textSize="14sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp" />
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre del Auditor"
+            android:textColor="@color/gris_oscuro"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
 
+        <TextView
+            android:id="@+id/tv_user_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¡Bienvenido, auditor!"
+            android:textColor="@color/gris_oscuro"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 </LinearLayout>
-

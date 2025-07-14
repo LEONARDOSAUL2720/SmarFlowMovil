@@ -21,8 +21,8 @@ class LoginActivity : AppCompatActivity() {
 
     // URL de tu API - CAMBIA ESTA URL por la de tu servidor
     // private val API_BASE_URL = "http://10.0.2.2:3000/api" // Para emulador Android
-     private val API_BASE_URL = "http://192.168.1.13:3000/api" // Para dispositivo físico
-    //private val API_BASE_URL = "https://smartflow-mwmm.onrender.com/api" // Para producción en Render
+    // private val API_BASE_URL = "http://192.168.1.13:3000/api" // Para dispositivo físico
+    private val API_BASE_URL = "https://smartflow-mwmm.onrender.com/api" // Para producción en Render
     private val LOGIN_ENDPOINT = "$API_BASE_URL/auth/login"
 
     private lateinit var requestQueue: RequestQueue
@@ -123,6 +123,41 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("user_email", user.getString("correo_user"))
         editor.putString("user_role", user.getString("rol_user"))
         editor.putBoolean("user_active", user.getBoolean("estado_user"))
+
+        // Debug: Ver todo el objeto user
+        Log.d("LoginActivity", "=== DEBUG IMAGEN ===")
+        Log.d("LoginActivity", "User JSON completo: $user")
+
+        // Verificar y guardar imagen_url (puede ser Base64 o URL)
+        if (user.has("imagen_url") && !user.isNull("imagen_url")) {
+            val imageUrl = user.getString("imagen_url")
+
+            // Verificar si es Base64 o URL normal
+            if (imageUrl.startsWith("data:image")) {
+                // Es Base64
+                editor.putString("user_image_base64", imageUrl)
+                editor.remove("user_image_url") // Limpiar URL si existe
+                Log.d("LoginActivity", "✅ Imagen Base64 guardada (${imageUrl.length} caracteres)")
+            } else {
+                // Es URL normal
+                editor.putString("user_image_url", imageUrl)
+                editor.remove("user_image_base64") // Limpiar Base64 si existe
+                Log.d("LoginActivity", "✅ URL de imagen guardada: $imageUrl")
+            }
+        } else {
+            Log.d("LoginActivity", "❌ NO se encontró imagen_url en JSON")
+            // Limpiar ambos campos
+            editor.remove("user_image_url")
+            editor.remove("user_image_base64")
+
+            // Mostrar todos los campos disponibles para debugging
+            val keys = user.keys()
+            val keysList = mutableListOf<String>()
+            while (keys.hasNext()) {
+                keysList.add(keys.next())
+            }
+            Log.d("LoginActivity", "Campos disponibles: $keysList")
+        }
 
         editor.apply()
     }

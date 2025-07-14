@@ -1,9 +1,12 @@
 package com.example.smartflow
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -11,6 +14,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import com.bumptech.glide.Glide
+
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 
 class MainAuditorActivity : AppCompatActivity() {
 
@@ -43,22 +53,123 @@ class MainAuditorActivity : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val userName = intent.getStringExtra("USER_NAME")
             ?: sharedPrefs.getString("user_name", "Usuario") ?: "Usuario"
-        val userEmail = sharedPrefs.getString("user_email", "")
-        val userRole = sharedPrefs.getString("user_role", "")
 
-        // Configurar header del Navigation Drawer
+        // Configurar header del Navigation Drawer PRIMERO
         val headerView: View = navView.getHeaderView(0)
         val tvUserName: TextView = headerView.findViewById(R.id.tv_user_name)
         val tvUserMessage: TextView = headerView.findViewById(R.id.tv_user_message)
+        val imgUser: ImageView = headerView.findViewById(R.id.img_user)
 
         tvUserName.text = userName
         tvUserMessage.text = "¡Bienvenido, $userName!"
 
-        // Si tienes un TextView para el email y rol en el header
-        // val tvUserEmail: TextView = headerView.findViewById(R.id.tv_user_email)
-        // val tvUserRole: TextView = headerView.findViewById(R.id.tv_user_role)
-        // tvUserEmail.text = userEmail
-        // tvUserRole.text = userRole
+        // Obtener imagen del usuario (Base64 o URL)
+        val userImageBase64 = sharedPrefs.getString("user_image_base64", null)
+        val userImageUrl = sharedPrefs.getString("user_image_url", null)
+
+        Log.d("MainAuditorActivity", "=== DEBUG CARGA IMAGEN ===")
+        Log.d("MainAuditorActivity", "Base64 disponible: ${!userImageBase64.isNullOrEmpty()}")
+        Log.d("MainAuditorActivity", "URL disponible: ${!userImageUrl.isNullOrEmpty()}")
+
+        // Cargar imagen según el tipo disponible
+        when {
+            !userImageBase64.isNullOrEmpty() -> {
+                Log.d("MainAuditorActivity", "🔄 Cargando imagen desde Base64")
+                loadImageFromBase64(userImageBase64, imgUser)
+            }
+            !userImageUrl.isNullOrEmpty() -> {
+                Log.d("MainAuditorActivity", "🔄 Cargando imagen desde URL: $userImageUrl")
+                loadImageFromUrl(userImageUrl, imgUser)
+            }
+            else -> {
+                Log.d("MainAuditorActivity", "❌ No hay imagen disponible")
+                imgUser.setImageResource(R.drawable.ic_person)
+            }
+        }
+    }
+
+    private fun loadImageFromBase64(base64String: String, imageView: ImageView) {
+        try {
+            // Extraer solo la parte Base64 (sin el prefijo data:image/...)
+            val base64Data = if (base64String.contains(",")) {
+                base64String.split(",")[1]
+            } else {
+                base64String
+            }
+
+            // Convertir Base64 a bytes
+            val imageBytes = Base64.decode(base64Data, Base64.DEFAULT)
+
+            Log.d("MainAuditorActivity", "✅ Base64 decodificado: ${imageBytes.size} bytes")
+
+            // Cargar con Glide
+            Glide.with(this)
+                .load(imageBytes)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Log.e("MainAuditorActivity", "❌ Error cargando Base64: ${e?.message}")
+                        return false
+                    }
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Log.d("MainAuditorActivity", "✅ Base64 cargada exitosamente")
+                        return false
+                    }
+                })
+                .circleCrop()
+                .into(imageView)
+
+        } catch (e: Exception) {
+            Log.e("MainAuditorActivity", "❌ Error procesando Base64: ${e.message}")
+            imageView.setImageResource(R.drawable.ic_person)
+        }
+    }
+
+    private fun loadImageFromUrl(imageUrl: String, imageView: ImageView) {
+        Glide.with(this)
+            .load(imageUrl)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .placeholder(R.drawable.ic_person)
+            .error(R.drawable.ic_person)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Log.e("MainAuditorActivity", "❌ Error cargando URL: ${e?.message}")
+                    Log.e("MainAuditorActivity", "URL que falló: $model")
+                    return false
+                }
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Log.d("MainAuditorActivity", "✅ URL cargada exitosamente: $model")
+                    return false
+                }
+            })
+            .circleCrop()
+            .into(imageView)
     }
 
     private fun setupNavigation() {
@@ -70,10 +181,6 @@ class MainAuditorActivity : AppCompatActivity() {
                 }
                 R.id.nav_opcion2 -> {
                     // Acción para Opción 2
-                    true
-                }
-                R.id.nav_opcion3 -> {
-                    // Acción para Opción 3
                     true
                 }
                 R.id.nav_opcion3 -> {
