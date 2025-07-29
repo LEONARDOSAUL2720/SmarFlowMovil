@@ -9,13 +9,13 @@
     <!-- Imagen grande a la izquierda -->
     <ImageView
         android:id="@+id/img_user"
-        android:layout_width="111dp"
-        android:layout_height="113dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_person"
+        android:contentDescription="@string/user_image"
         android:layout_gravity="center_vertical"
         android:background="@drawable/circle_bg"
-        android:contentDescription="@string/user_image"
-        android:padding="8dp"
-        android:src="@drawable/ic_person" />
+        android:padding="2dp" /> <!-- Reducido el padding -->
 
     <!-- Info a la derecha -->
     <LinearLayout

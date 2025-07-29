@@ -1,12 +1,14 @@
 package com.example.smartflow
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import android.widget.ImageView
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -31,6 +33,14 @@ class MainAuditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_auditor)
 
+        // Obtener el nombre del usuario desde el Intent o SharedPreferences (clave unificada)
+        val prefs: SharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val nombreUsuario = prefs.getString("user_name", "Usuario") ?: "Usuario"
+
+        // Asignar el nombre al header superior
+        val tvHeaderUserName = findViewById<TextView>(R.id.tv_header_user_name)
+        tvHeaderUserName.text = nombreUsuario
+
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
 
@@ -41,27 +51,32 @@ class MainAuditorActivity : AppCompatActivity() {
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Obtener datos del usuario
-        setupUserHeader()
+        // Pasar el nombre del usuario al header del Navigation Drawer
+        setupUserHeader(nombreUsuario)
 
         // Configurar navegación
         setupNavigation()
+
+        // Botón para abrir el menú lateral desde el header
+        val btnOpenDrawer = findViewById<ImageButton>(R.id.btn_open_drawer)
+        btnOpenDrawer.setImageResource(android.R.drawable.ic_menu_sort_by_size) // Ícono estándar
+        btnOpenDrawer.setOnClickListener {
+            drawerLayout.openDrawer(navView)
+        }
     }
 
-    private fun setupUserHeader() {
-        // Obtener datos del usuario desde Intent o SharedPreferences
+    // Ahora recibe el nombre del usuario como parámetro
+    private fun setupUserHeader(nombreUsuario: String) {
         val sharedPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        val userName = intent.getStringExtra("USER_NAME")
-            ?: sharedPrefs.getString("user_name", "Usuario") ?: "Usuario"
 
-        // Configurar header del Navigation Drawer PRIMERO
+        // Configurar header del Navigation Drawer
         val headerView: View = navView.getHeaderView(0)
         val tvUserName: TextView = headerView.findViewById(R.id.tv_user_name)
         val tvUserMessage: TextView = headerView.findViewById(R.id.tv_user_message)
         val imgUser: ImageView = headerView.findViewById(R.id.img_user)
 
-        tvUserName.text = userName
-        tvUserMessage.text = "¡Bienvenido, $userName!"
+        tvUserName.text = nombreUsuario
+        tvUserMessage.text = "¡Bienvenido, $nombreUsuario!"
 
         // Obtener imagen del usuario (Base64 o URL)
         val userImageBase64 = sharedPrefs.getString("user_image_base64", null)
@@ -175,12 +190,12 @@ class MainAuditorActivity : AppCompatActivity() {
     private fun setupNavigation() {
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.nav_opcion1 -> {
-                    // Acción para Opción 1
+                R.id.nav_ordenes_compra -> {
+                    startActivity(Intent(this, OrdenesCompra::class.java))
                     true
                 }
-                R.id.nav_opcion2 -> {
-                    // Acción para Opción 2
+                R.id.nav_entradas -> {
+                    startActivity(Intent(this, EntradasAuditor::class.java))
                     true
                 }
                 R.id.nav_opcion3 -> {

@@ -32,6 +32,9 @@
         </activity>
         <activity android:name=".MainAuditorActivity"/>
         <activity android:name=".MainEmpleadoActivity"/>
+        <activity android:name=".OrdenesCompra"/>
+        <activity android:name="EntradasAuditor"/>
+
     </application>
 
 </manifest>

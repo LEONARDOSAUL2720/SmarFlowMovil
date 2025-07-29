@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gris_perla_claro"
+    android:layout_marginTop="40dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Título principal -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Consulta de Orden de Compra"
+            android:textColor="@color/lavanda_suave"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="18dp"/>
+
+        <!-- Búsqueda por ID de orden de compra -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="18dp">
+
+            <EditText
+                android:id="@+id/et_id_orden"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="Número Orden Compra"
+                android:padding="12dp"
+                android:textColor="@color/gris_oscuro"
+                android:textColorHint="@color/gris_oscuro"
+                android:background="@drawable/circle_bg"
+                android:elevation="2dp"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_buscar_orden"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="10dp"
+                android:text="Buscar"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:backgroundTint="@color/lavanda_suave"
+                android:elevation="2dp"/>
+        </LinearLayout>
+
+        <!-- Card: Orden de compra -->
+        <LinearLayout
+            android:id="@+id/card_orden"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:elevation="6dp"
+            android:padding="18dp"
+            android:visibility="gone"
+            android:layout_marginBottom="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/white"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_marginHorizontal="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orden de Compra"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lavanda_suave"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_id_orden"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ID: "
+                android:textColor="@color/gris_oscuro"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_fecha_orden"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_estatus_orden"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estatus: "
+                android:textColor="@color/verde_salvia"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="2dp"/>
+
+            <TextView
+                android:id="@+id/tv_cantidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_precio_unitario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio unitario: "
+                android:textColor="@color/oro_palido"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_precio_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio total: "
+                android:textColor="@color/oro_palido"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- Card: Perfume -->
+        <LinearLayout
+            android:id="@+id/card_perfume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:elevation="6dp"
+            android:padding="18dp"
+            android:visibility="gone"
+            android:layout_marginBottom="18dp"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/white"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_marginHorizontal="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Perfume"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lavanda_suave"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_nombre_perfume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre: "
+                android:textColor="@color/gris_oscuro"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_descripcion_perfume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_categoria_perfume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categoría: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_precio_venta_perfume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio venta: "
+                android:textColor="@color/oro_palido"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_stock_perfume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stock: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_ubicacion_perfume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ubicación: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_fecha_expiracion_perfume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expira: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+        </LinearLayout>
+
+        <!-- Card: Proveedor -->
+        <LinearLayout
+            android:id="@+id/card_proveedor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:elevation="6dp"
+            android:padding="18dp"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/white"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_marginHorizontal="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proveedor"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lavanda_suave"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_nombre_proveedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre: "
+                android:textColor="@color/gris_oscuro"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_rfc_proveedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RFC: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_contacto_proveedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contacto: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_telefono_proveedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teléfono: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_email_proveedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_direccion_proveedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dirección: "
+                android:textColor="@color/gris_oscuro"
+                android:textSize="15sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

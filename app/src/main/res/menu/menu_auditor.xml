@@ -1,17 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_opcion1"
-        android:title="Opción 1"/>
-<!--        android:icon="@drawable/ic_opcion1"-->
 
     <item
-        android:id="@+id/nav_opcion2"
-        android:title="Opción 2" />
-<!--        android:icon="@drawable/ic_opcion2"-->
+        android:id="@+id/nav_ordenes_compra"
+        android:title="Ordenes Compra"
+        android:icon="@drawable/ic_ordenes_compras" />
+
+    <item
+        android:id="@+id/nav_entradas"
+        android:title="Entradas"
+        android:icon="@drawable/ic_entradas" />
 
     <item
         android:id="@+id/nav_opcion3"
         android:title="Cerrar Sesión"/>
 <!--        android:icon="@drawable/ic_logout"-->
+
+
 
 </menu>
