@@ -157,7 +157,13 @@ class EntradasAuditor : AppCompatActivity() {
         }
 
         btnValidarEntrada.setOnClickListener {
-            Toast.makeText(this, "Funcionalidad de validación pendiente", Toast.LENGTH_SHORT).show()
+            val numeroEntrada = etNumeroEntrada.text.toString().trim()
+            if (numeroEntrada.isNotEmpty()) {
+                Log.d("EntradasAuditor", "✅ Procesando validación para entrada: '$numeroEntrada'")
+                procesarValidacionEntrada(numeroEntrada)
+            } else {
+                Toast.makeText(this, "No hay entrada seleccionada para validar", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -230,7 +236,17 @@ class EntradasAuditor : AppCompatActivity() {
             containerDetalles.visibility = View.VISIBLE
             cardValidaciones.visibility = View.VISIBLE
 
-        } catch (e: Exception) {
+            // Configurar botón de validación según el estado actual
+            val estatusValidacion = entrada.optString("estatus_validacion", "registrado")
+            if (estatusValidacion == "validado") {
+                btnValidarEntrada.isEnabled = false
+                btnValidarEntrada.text = "✅ Ya Validada"
+                btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
+            } else {
+                btnValidarEntrada.isEnabled = true
+                btnValidarEntrada.text = "Validar Entrada"
+                btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, R.color.lavanda_suave)
+            }        } catch (e: Exception) {
             Log.e("EntradasAuditor", "❌ Error procesando respuesta", e)
             showError("Error procesando los datos recibidos: ${e.message}")
         }
@@ -412,6 +428,147 @@ class EntradasAuditor : AppCompatActivity() {
         // Ocultar el container de detalles si hay error
         containerDetalles.visibility = View.GONE
         cardValidaciones.visibility = View.GONE
+    }
+
+    private fun procesarValidacionEntrada(numeroEntrada: String) {
+        // Mostrar diálogo de confirmación
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Confirmar Validación")
+        builder.setMessage("¿Estás seguro de que deseas validar esta entrada?\n\nEsto actualizará:\n• Estado de la orden de compra a 'Completada'\n• Stock del perfume con la cantidad de la entrada\n• Estado de validación de la entrada")
+
+        builder.setPositiveButton("Validar") { _, _ ->
+            ejecutarValidacionEntrada(numeroEntrada)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun ejecutarValidacionEntrada(numeroEntrada: String) {
+        showLoading(true)
+        btnValidarEntrada.isEnabled = false
+        btnValidarEntrada.text = "Procesando..."
+
+        val token = getAuthToken()
+        if (token.isNullOrEmpty()) {
+            showError("Token de autenticación no encontrado")
+            return
+        }
+
+        val url = "$BASE_URL/auditor/validar-entrada/$numeroEntrada"
+        Log.d("EntradasAuditor", "✅ Procesando validación en: $url")
+
+        val request = object : JsonObjectRequest(
+            Request.Method.POST,
+            url,
+            null,
+            { response ->
+                Log.d("EntradasAuditor", "✅ Validación procesada exitosamente: $response")
+                showLoading(false)
+                btnValidarEntrada.isEnabled = false
+                btnValidarEntrada.text = "✅ Validada"
+                btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
+
+                handleValidacionResponse(response)
+            },
+            { error ->
+                Log.e("EntradasAuditor", "❌ Error en validación", error)
+                Log.e("EntradasAuditor", "❌ Status code: ${error.networkResponse?.statusCode}")
+
+                val responseData = error.networkResponse?.data?.toString(Charsets.UTF_8)
+                Log.e("EntradasAuditor", "❌ Response body: $responseData")
+
+                showLoading(false)
+                btnValidarEntrada.isEnabled = true
+                btnValidarEntrada.text = "Validar Entrada"
+
+                val errorMessage = when (error.networkResponse?.statusCode) {
+                    400 -> "La validación no pudo completarse. Verifica los datos"
+                    401 -> "No autorizado. Inicia sesión nuevamente"
+                    403 -> "No tienes permisos para validar entradas"
+                    404 -> "Entrada u orden de compra no encontrada"
+                    500 -> "Error interno del servidor"
+                    else -> "Error de conexión. Verifica tu internet"
+                }
+
+                showError(errorMessage)
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                headers["Content-Type"] = "application/json"
+                return headers
+            }
+        }
+
+        requestQueue.add(request)
+    }
+
+    private fun handleValidacionResponse(response: JSONObject) {
+        try {
+            val success = response.getBoolean("success")
+            val message = response.getString("message")
+            val data = response.getJSONObject("data")
+
+            if (success) {
+                // Mostrar información de la validación
+                val entrada = data.getJSONObject("entrada")
+                val ordenCompra = data.getJSONObject("orden_compra")
+                val perfume = data.getJSONObject("perfume")
+                val auditor = data.getJSONObject("auditor")
+
+                val detalleValidacion = """
+                    ✅ VALIDACIÓN COMPLETADA EXITOSAMENTE
+                    
+                    📋 ENTRADA:
+                    • Número: ${entrada.getString("numero_entrada")}
+                    • Estado: ${entrada.getString("estatus_nuevo")}
+                    • Cantidad procesada: ${entrada.getInt("cantidad")}
+                    
+                    🛒 ORDEN DE COMPRA:
+                    • Número: ${ordenCompra.getString("numero_orden")}
+                    • Estado anterior: ${ordenCompra.getString("estado_anterior")}
+                    • Estado nuevo: ${ordenCompra.getString("estado_nuevo")}
+                    
+                    💎 PERFUME:
+                    • ${perfume.getString("nombre")}
+                    • Stock anterior: ${perfume.getInt("stock_anterior")}
+                    • Stock nuevo: ${perfume.getInt("stock_nuevo")}
+                    • Cantidad agregada: +${perfume.getInt("cantidad_agregada")}
+                    
+                    👤 AUDITOR RESPONSABLE:
+                    • Nombre: ${auditor.optString("nombre", "No disponible")}${if (auditor.optString("apellido", "").isNotEmpty()) " ${auditor.getString("apellido")}" else ""}
+                    • Email: ${auditor.optString("email", "No disponible")}
+                    • Rol: ${auditor.optString("rol", "Auditor")}
+                    • ID Usuario: ${auditor.optString("id", "No disponible")}
+                    • Fecha: ${auditor.optString("fecha_validacion_formateada", formatDate(auditor.optString("fecha_validacion", "")))}
+                """.trimIndent()
+
+                // Mostrar diálogo con detalles
+                val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+                builder.setTitle("Validación Completada")
+                builder.setMessage(detalleValidacion)
+                builder.setPositiveButton("Entendido") { dialog, _ ->
+                    dialog.dismiss()
+                    // Opcionalmente, actualizar la vista con los nuevos datos
+                    buscarEntrada(entrada.getString("numero_entrada"))
+                }
+                builder.show()
+
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+
+            } else {
+                showError("Error en la validación: $message")
+            }
+
+        } catch (e: Exception) {
+            Log.e("EntradasAuditor", "❌ Error procesando respuesta de validación", e)
+            showError("Error procesando la respuesta de validación: ${e.message}")
+        }
     }
 
     private fun getAuthToken(): String? {

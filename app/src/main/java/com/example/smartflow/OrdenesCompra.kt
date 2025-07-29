@@ -14,7 +14,6 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
 class OrdenesCompra : AppCompatActivity() {
-
     // Configuración de la API
     private val BASE_URL = "https://smartflow-mwmm.onrender.com/api"
     private val ORDEN_ENDPOINT = "$BASE_URL/auditor/orden-compra"
@@ -35,6 +34,9 @@ class OrdenesCompra : AppCompatActivity() {
     private lateinit var tvCantidad: TextView
     private lateinit var tvPrecioUnitario: TextView
     private lateinit var tvPrecioTotal: TextView
+    // NUEVOS CAMPOS
+    private lateinit var tvAlmacen: TextView
+    private lateinit var tvObservaciones: TextView
 
     // Perfume Fields
     private lateinit var tvNombrePerfume: TextView
@@ -57,7 +59,7 @@ class OrdenesCompra : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ordenes_compras)
+        setContentView(R.layout.ordenes_compras_auditor)
 
         initializeViews()
         setupClickListeners()
@@ -84,6 +86,9 @@ class OrdenesCompra : AppCompatActivity() {
         tvCantidad = findViewById(R.id.tv_cantidad)
         tvPrecioUnitario = findViewById(R.id.tv_precio_unitario)
         tvPrecioTotal = findViewById(R.id.tv_precio_total)
+        // NUEVOS CAMPOS
+        tvAlmacen = findViewById(R.id.tv_almacen)
+        tvObservaciones = findViewById(R.id.tv_observaciones)
 
         // Perfume Fields
         tvNombrePerfume = findViewById(R.id.tv_nombre_perfume)
@@ -209,6 +214,16 @@ class OrdenesCompra : AppCompatActivity() {
         tvPrecioUnitario.text = "Precio unitario: $${ordenCompra.optDouble("precio_unitario", 0.0)}"
         tvPrecioTotal.text = "Precio total: $${ordenCompra.optDouble("precio_total", 0.0)}"
 
+        // NUEVOS CAMPOS
+        tvAlmacen.text = "Almacén: ${ordenCompra.optString("almacen", "No disponible")}"
+
+        val observaciones = ordenCompra.optString("observaciones", "")
+        tvObservaciones.text = if (observaciones.isNotEmpty()) {
+            "Observaciones: $observaciones"
+        } else {
+            "Observaciones: Sin observaciones"
+        }
+
         // Configurar color del estatus
         val estado = ordenCompra.optString("estado", "").lowercase()
         tvEstatusOrden.setTextColor(ContextCompat.getColor(this, when(estado) {
@@ -256,6 +271,8 @@ class OrdenesCompra : AppCompatActivity() {
 
         Log.d("OrdenesCompra", "✅ Datos mostrados correctamente")
         Log.d("OrdenesCompra", "📋 Orden: ${ordenCompra.optString("n_orden_compra")}")
+        Log.d("OrdenesCompra", "🏪 Almacén: ${ordenCompra.optString("almacen", "No disponible")}")
+        Log.d("OrdenesCompra", "📝 Observaciones: ${ordenCompra.optString("observaciones", "Sin observaciones")}")
         Log.d("OrdenesCompra", "🌸 Perfume: ${perfume?.optString("name_per") ?: "No disponible"}")
         Log.d("OrdenesCompra", "🏢 Proveedor: ${proveedor?.optString("nombre_proveedor") ?: "No disponible"}")
     }

@@ -129,8 +129,8 @@ class LoginActivity : AppCompatActivity() {
         Log.d("LoginActivity", "User JSON completo: $user")
 
         // Verificar y guardar imagen_url (puede ser Base64 o URL)
-        if (user.has("imagen_url") && !user.isNull("imagen_url")) {
-            val imageUrl = user.getString("imagen_url")
+        if (user.has("imagen_user") && !user.isNull("imagen_user")) {
+            val imageUrl = user.getString("imagen_user")
 
             // Verificar si es Base64 o URL normal
             if (imageUrl.startsWith("data:image")) {
