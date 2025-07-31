@@ -395,7 +395,7 @@
                     android:elevation="2dp"
                     android:padding="12dp"/>
 
-                <!-- Tarjeta de Validaciones -->
+                <!-- Tarjeta de Validaciones ACTUALIZADA -->
                 <LinearLayout
                     android:id="@+id/card_validaciones"
                     android:layout_width="match_parent"
@@ -414,17 +414,101 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Validación Cruzada"
+                        android:text="📊 Resumen Ejecutivo de Validación"
                         android:textColor="@color/lavanda_suave"
                         android:textStyle="bold"
                         android:textSize="18sp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="12dp"/>
 
+                    <!-- RESUMEN EJECUTIVO -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@color/gris_perla_claro"
+                        android:padding="12dp"
+                        android:layout_marginBottom="16dp"
+                        android:radius="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_estado_validacion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Estado: "
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_mensaje_principal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mensaje: "
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_accion_recomendada"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Acción: "
+                            android:textColor="@color/gris_oscuro"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_siguiente_paso"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Siguiente paso: "
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_tiempo_resolucion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tiempo estimado: "
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                    <!-- MÉTRICAS -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:id="@+id/tv_porcentaje_cumplimiento"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cumplimiento: "
+                            android:textColor="@color/gris_oscuro"
+                            android:textStyle="bold"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/tv_nivel_riesgo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Riesgo: "
+                            android:textStyle="bold"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <!-- VALIDACIONES INDIVIDUALES -->
                     <TextView
-                        android:id="@+id/tv_estado_validacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Estado: "
+                        android:text="🔍 Validaciones Individuales"
+                        android:textColor="@color/lavanda_suave"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp"/>
@@ -434,47 +518,109 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Proveedor: "
-                        android:textColor="@color/gris_oscuro"/>
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/tv_cantidad_validacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Cantidad: "
-                        android:textColor="@color/gris_oscuro"/>
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/tv_fecha_validacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fechas: "
-                        android:textColor="@color/gris_oscuro"/>
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"/>
 
-                    <!-- Lista de discrepancias -->
+                    <TextView
+                        android:id="@+id/tv_precio_validacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Precio: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/tv_estado_orden_validacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estado Orden: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- DISCREPANCIAS Y OBSERVACIONES -->
                     <LinearLayout
                         android:id="@+id/layout_discrepancias"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginTop="8dp"
                         android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="⚠️ Discrepancias Encontradas:"
-                            android:textColor="@color/rojo_vino_tenue"
+                            android:text="📋 Detalles de Validación"
+                            android:textColor="@color/lavanda_suave"
                             android:textStyle="bold"
-                            android:layout_marginBottom="4dp"/>
+                            android:textSize="16sp"
+                            android:layout_marginBottom="8dp"/>
 
+                        <!-- Discrepancias Críticas -->
                         <ScrollView
-                            android:id="@+id/scroll_discrepancias"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxHeight="150dp">
+                            android:maxHeight="120dp"
+                            android:layout_marginBottom="8dp">
 
                             <LinearLayout
-                                android:id="@+id/container_discrepancias"
+                                android:id="@+id/container_discrepancias_criticas"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"/>
+                        </ScrollView>
+
+                        <!-- Discrepancias Importantes -->
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="120dp"
+                            android:layout_marginBottom="8dp">
+
+                            <LinearLayout
+                                android:id="@+id/container_discrepancias_importantes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"/>
+                        </ScrollView>
+
+                        <!-- Advertencias -->
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="100dp"
+                            android:layout_marginBottom="8dp">
+
+                            <LinearLayout
+                                android:id="@+id/container_advertencias"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"/>
+                        </ScrollView>
+
+                        <!-- Recomendaciones -->
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="100dp">
+
+                            <LinearLayout
+                                android:id="@+id/container_recomendaciones"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"/>
