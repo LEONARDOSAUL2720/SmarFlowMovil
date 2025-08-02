@@ -18,7 +18,13 @@ class EntradasAuditor : AppCompatActivity() {
 
     // Configuración de la API
     private val BASE_URL = "https://smartflow-mwmm.onrender.com/api"
+
+    // NUEVA RUTA: Búsqueda inteligente que detecta automáticamente el tipo
+    private val ENTRADA_BUSQUEDA_INTELIGENTE = "$BASE_URL/auditor/entrada-busqueda"
+
+    // Rutas específicas (para fallback si es necesario)
     private val ENTRADA_ENDPOINT = "$BASE_URL/auditor/entrada"
+    private val ENTRADA_TRASPASO_ENDPOINT = "$BASE_URL/auditor/entrada-traspaso"
 
     // UI Components principales
     private lateinit var etNumeroEntrada: EditText
@@ -36,14 +42,22 @@ class EntradasAuditor : AppCompatActivity() {
     private lateinit var tvProveedorEntrada: TextView
     private lateinit var tvFechaEntrada: TextView
     private lateinit var tvEstatusEntrada: TextView
+    private lateinit var tvTipoEntrada: TextView
 
-    // Orden de Compra Fields
-    private lateinit var tvNumeroOrden: TextView
+    // Campos flexibles que cambian según el tipo
+    private lateinit var tvTituloSeccionDos: TextView // "Orden de Compra" o "Traspaso Original"
+    private lateinit var tvNumeroOrdenOTraspaso: TextView
     private lateinit var tvCantidad: TextView
     private lateinit var tvPrecioUnitario: TextView
     private lateinit var tvPrecioTotal: TextView
     private lateinit var tvFechaOrden: TextView
     private lateinit var tvEstatus: TextView
+
+    // Campos específicos para traspasos
+    private lateinit var tvFechaSalida: TextView
+    private lateinit var tvAlmacenSalida: TextView
+    private lateinit var tvAlmacenEntrada: TextView
+    private lateinit var tvReferenciaTraspaso: TextView
 
     // Perfume Fields
     private lateinit var tvNombrePerfume: TextView
@@ -65,7 +79,7 @@ class EntradasAuditor : AppCompatActivity() {
     private lateinit var tvDireccionProveedor: TextView
     private lateinit var tvEstadoProveedor: TextView
 
-    // Validación Fields - ACTUALIZADOS
+    // Validación Fields
     private lateinit var tvEstadoValidacion: TextView
     private lateinit var tvMensajePrincipal: TextView
     private lateinit var tvAccionRecomendada: TextView
@@ -74,12 +88,12 @@ class EntradasAuditor : AppCompatActivity() {
     private lateinit var tvPorcentajeCumplimiento: TextView
     private lateinit var tvNivelRiesgo: TextView
 
-    // Validaciones individuales
-    private lateinit var tvProveedorValidacion: TextView
-    private lateinit var tvCantidadValidacion: TextView
-    private lateinit var tvFechaValidacion: TextView
-    private lateinit var tvPrecioValidacion: TextView
-    private lateinit var tvEstadoOrdenValidacion: TextView
+    // Validaciones individuales (que cambiarán según el tipo)
+    private lateinit var tvValidacion1: TextView // Proveedor o Perfume
+    private lateinit var tvValidacion2: TextView // Cantidad
+    private lateinit var tvValidacion3: TextView // Fecha
+    private lateinit var tvValidacion4: TextView // Precio o Almacenes
+    private lateinit var tvValidacion5: TextView // Estado Orden o Estado Traspaso
 
     // Contenedores de discrepancias
     private lateinit var layoutDiscrepancias: LinearLayout
@@ -92,6 +106,9 @@ class EntradasAuditor : AppCompatActivity() {
     private lateinit var btnValidarEntrada: Button
 
     private lateinit var requestQueue: RequestQueue
+
+    // Variable para controlar el tipo de entrada actual
+    private var tipoEntradaActual: String = "Compra" // "Compra" o "Traspaso"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,14 +137,22 @@ class EntradasAuditor : AppCompatActivity() {
         tvProveedorEntrada = findViewById(R.id.tv_proveedor_entrada)
         tvFechaEntrada = findViewById(R.id.tv_fecha_entrada)
         tvEstatusEntrada = findViewById(R.id.tv_estatus_entrada)
+        tvTipoEntrada = findViewById(R.id.tv_tipo_entrada)
 
-        // Orden de Compra
-        tvNumeroOrden = findViewById(R.id.tv_numero_orden)
+        // Campos flexibles
+        tvTituloSeccionDos = findViewById(R.id.tv_titulo_seccion_dos)
+        tvNumeroOrdenOTraspaso = findViewById(R.id.tv_numero_orden)
         tvCantidad = findViewById(R.id.tv_cantidad)
         tvPrecioUnitario = findViewById(R.id.tv_precio_unitario)
         tvPrecioTotal = findViewById(R.id.tv_precio_total)
         tvFechaOrden = findViewById(R.id.tv_fecha_orden)
         tvEstatus = findViewById(R.id.tv_estatus)
+
+        // Campos específicos para traspasos
+        tvFechaSalida = findViewById(R.id.tv_fecha_salida)
+        tvAlmacenSalida = findViewById(R.id.tv_almacen_salida)
+        tvAlmacenEntrada = findViewById(R.id.tv_almacen_entrada)
+        tvReferenciaTraspaso = findViewById(R.id.tv_referencia_traspaso)
 
         // Perfume
         tvNombrePerfume = findViewById(R.id.tv_nombre_perfume)
@@ -149,7 +174,7 @@ class EntradasAuditor : AppCompatActivity() {
         tvDireccionProveedor = findViewById(R.id.tv_direccion_proveedor)
         tvEstadoProveedor = findViewById(R.id.tv_estado_proveedor)
 
-        // Validaciones - NUEVOS
+        // Validaciones
         tvEstadoValidacion = findViewById(R.id.tv_estado_validacion)
         tvMensajePrincipal = findViewById(R.id.tv_mensaje_principal)
         tvAccionRecomendada = findViewById(R.id.tv_accion_recomendada)
@@ -158,12 +183,12 @@ class EntradasAuditor : AppCompatActivity() {
         tvPorcentajeCumplimiento = findViewById(R.id.tv_porcentaje_cumplimiento)
         tvNivelRiesgo = findViewById(R.id.tv_nivel_riesgo)
 
-        // Validaciones individuales
-        tvProveedorValidacion = findViewById(R.id.tv_proveedor_validacion)
-        tvCantidadValidacion = findViewById(R.id.tv_cantidad_validacion)
-        tvFechaValidacion = findViewById(R.id.tv_fecha_validacion)
-        tvPrecioValidacion = findViewById(R.id.tv_precio_validacion)
-        tvEstadoOrdenValidacion = findViewById(R.id.tv_estado_orden_validacion)
+        // Validaciones individuales (nombres genéricos)
+        tvValidacion1 = findViewById(R.id.tv_proveedor_validacion)
+        tvValidacion2 = findViewById(R.id.tv_cantidad_validacion)
+        tvValidacion3 = findViewById(R.id.tv_fecha_validacion)
+        tvValidacion4 = findViewById(R.id.tv_precio_validacion)
+        tvValidacion5 = findViewById(R.id.tv_estado_orden_validacion)
 
         // Contenedores de discrepancias
         layoutDiscrepancias = findViewById(R.id.layout_discrepancias)
@@ -181,7 +206,7 @@ class EntradasAuditor : AppCompatActivity() {
             val numeroEntrada = etNumeroEntrada.text.toString().trim()
             if (numeroEntrada.isNotEmpty()) {
                 Log.d("EntradasAuditor", "🔍 Búsqueda iniciada con número: '$numeroEntrada'")
-                buscarEntrada(numeroEntrada)
+                buscarEntradaInteligente(numeroEntrada)
             } else {
                 Toast.makeText(this, "Por favor ingresa un número de entrada", Toast.LENGTH_SHORT).show()
             }
@@ -198,7 +223,8 @@ class EntradasAuditor : AppCompatActivity() {
         }
     }
 
-    private fun buscarEntrada(numeroEntrada: String) {
+    // NUEVA FUNCIÓN: Búsqueda inteligente usando el endpoint unificado
+    private fun buscarEntradaInteligente(numeroEntrada: String) {
         showLoading(true)
 
         val token = getAuthToken()
@@ -207,32 +233,27 @@ class EntradasAuditor : AppCompatActivity() {
             return
         }
 
-        val url = "$ENTRADA_ENDPOINT/$numeroEntrada"
-        Log.d("EntradasAuditor", "🔍 Haciendo petición a: $url")
+        val url = "$ENTRADA_BUSQUEDA_INTELIGENTE/$numeroEntrada"
+        Log.d("EntradasAuditor", "🔍 Haciendo petición INTELIGENTE a: $url")
 
         val request = object : JsonObjectRequest(
             Request.Method.GET,
             url,
             null,
             { response ->
-                Log.d("EntradasAuditor", "✅ Respuesta recibida: $response")
+                Log.d("EntradasAuditor", "✅ Respuesta INTELIGENTE recibida: $response")
                 showLoading(false)
-                handleApiResponse(response)
+                handleApiResponseInteligente(response)
             },
             { error ->
-                Log.e("EntradasAuditor", "❌ Error en petición", error)
-                Log.e("EntradasAuditor", "❌ Status code: ${error.networkResponse?.statusCode}")
-
-                val responseData = error.networkResponse?.data?.toString(Charsets.UTF_8)
-                Log.e("EntradasAuditor", "❌ Response body: $responseData")
-
+                Log.e("EntradasAuditor", "❌ Error en petición INTELIGENTE", error)
                 showLoading(false)
 
                 val errorMessage = when (error.networkResponse?.statusCode) {
                     400 -> "Número de entrada inválido"
                     401 -> "No autorizado. Inicia sesión nuevamente"
                     403 -> "No tienes permisos para acceder a esta información"
-                    404 -> "Entrada no encontrada"
+                    404 -> "No se encontró entrada con ese número (ni como Compra ni como Traspaso)"
                     500 -> "Error interno del servidor"
                     else -> "Error de conexión. Verifica tu internet"
                 }
@@ -251,17 +272,37 @@ class EntradasAuditor : AppCompatActivity() {
         requestQueue.add(request)
     }
 
-    private fun handleApiResponse(response: JSONObject) {
+    // NUEVA FUNCIÓN: Maneja la respuesta de la búsqueda inteligente
+    private fun handleApiResponseInteligente(response: JSONObject) {
         try {
             val data = response.getJSONObject("data")
             val entrada = data.getJSONObject("entrada")
+
+            // Determinar el tipo basándose en la respuesta
+            val tipo = entrada.optString("tipo", "")
+            val referenciaTraspaso = entrada.optString("referencia_traspaso", "")
+
+            // Detectar automáticamente el tipo
+            tipoEntradaActual = when {
+                tipo == "Traspaso" || referenciaTraspaso.isNotEmpty() -> "Traspaso"
+                else -> "Compra"
+            }
+
+            Log.d("EntradasAuditor", "🎯 Tipo detectado automáticamente: $tipoEntradaActual")
+
             val perfume = data.optJSONObject("perfume")
             val proveedor = data.optJSONObject("proveedor_detalle")
-            val ordenCompra = data.optJSONObject("orden_compra_relacionada")
             val validacion = data.getJSONObject("validacion")
 
-            displayEntradaData(entrada, perfume, proveedor, ordenCompra)
-            displayValidacionesDetalladas(validacion)
+            if (tipoEntradaActual == "Traspaso") {
+                val traspasoOriginal = data.optJSONObject("traspaso_original")
+                displayEntradaDataTraspaso(entrada, perfume, proveedor, traspasoOriginal)
+                displayValidacionesDetalladasTraspaso(validacion)
+            } else {
+                val ordenCompra = data.optJSONObject("orden_compra_relacionada")
+                displayEntradaDataCompra(entrada, perfume, proveedor, ordenCompra)
+                displayValidacionesDetalladasCompra(validacion)
+            }
 
             // Mostrar el container principal de detalles
             containerDetalles.visibility = View.VISIBLE
@@ -271,19 +312,23 @@ class EntradasAuditor : AppCompatActivity() {
             configurarBotonValidacion(entrada, validacion)
 
         } catch (e: Exception) {
-            Log.e("EntradasAuditor", "❌ Error procesando respuesta", e)
+            Log.e("EntradasAuditor", "❌ Error procesando respuesta INTELIGENTE", e)
             showError("Error procesando los datos recibidos: ${e.message}")
         }
     }
 
-    private fun displayEntradaData(
+    private fun displayEntradaDataCompra(
         entrada: JSONObject,
         perfume: JSONObject?,
         proveedor: JSONObject?,
         ordenCompra: JSONObject?
     ) {
+        // Configurar campos para tipo COMPRA
+        configurarCamposParaCompra()
+
         // Mostrar datos de la ENTRADA
         tvNumeroEntrada.text = "N° Entrada: ${entrada.optString("numero_entrada", "No disponible")}"
+        tvTipoEntrada.text = "Tipo: COMPRA"
         tvCantidadEntrada.text = "Cantidad: ${entrada.optInt("cantidad", 0)}"
 
         // Proveedor de la entrada
@@ -294,14 +339,14 @@ class EntradasAuditor : AppCompatActivity() {
 
         // Mostrar datos de la orden de compra relacionada
         if (ordenCompra != null) {
-            tvNumeroOrden.text = "N° Orden: ${ordenCompra.optString("numero_orden", "No disponible")}"
+            tvNumeroOrdenOTraspaso.text = "N° Orden: ${ordenCompra.optString("numero_orden", "No disponible")}"
             tvCantidad.text = "Cantidad: ${ordenCompra.optInt("cantidad", 0)}"
             tvPrecioUnitario.text = "Precio unitario: $${ordenCompra.optDouble("precio_unitario", 0.0)}"
             tvPrecioTotal.text = "Precio total: $${ordenCompra.optDouble("precio_total", 0.0)}"
             tvFechaOrden.text = "Fecha: ${formatDate(ordenCompra.optString("fecha_orden", ""))}"
             tvEstatus.text = "Estatus: ${ordenCompra.optString("estado", "No disponible").uppercase()}"
         } else {
-            tvNumeroOrden.text = "N° Orden: No encontrada"
+            tvNumeroOrdenOTraspaso.text = "N° Orden: No encontrada"
             tvCantidad.text = "Cantidad: No disponible"
             tvPrecioUnitario.text = "Precio unitario: No disponible"
             tvPrecioTotal.text = "Precio total: No disponible"
@@ -309,7 +354,93 @@ class EntradasAuditor : AppCompatActivity() {
             tvEstatus.text = "Estatus: No disponible"
         }
 
-        // Mostrar datos del perfume
+        // Mostrar datos del perfume y proveedor (igual para ambos tipos)
+        displayPerfumeData(perfume)
+        displayProveedorData(proveedor)
+    }
+
+    private fun displayEntradaDataTraspaso(
+        entrada: JSONObject,
+        perfume: JSONObject?,
+        proveedor: JSONObject?,
+        traspasoOriginal: JSONObject?
+    ) {
+        // Configurar campos para tipo TRASPASO
+        configurarCamposParaTraspaso()
+
+        // Mostrar datos de la ENTRADA
+        tvNumeroEntrada.text = "N° Entrada: ${entrada.optString("numero_entrada", "No disponible")}"
+        tvTipoEntrada.text = "Tipo: TRASPASO"
+        tvCantidadEntrada.text = "Cantidad: ${entrada.optInt("cantidad", 0)}"
+
+        // Proveedor de la entrada
+        val proveedorEntrada = entrada.optJSONObject("proveedor")
+        tvProveedorEntrada.text = "Proveedor: ${proveedorEntrada?.optString("nombre_proveedor", "No disponible") ?: "No disponible"}"
+        tvFechaEntrada.text = "Fecha entrada: ${formatDate(entrada.optString("fecha_entrada", ""))}"
+        tvEstatusEntrada.text = "Estatus: ${entrada.optString("estatus_validacion", "No disponible").uppercase()}"
+        tvReferenciaTraspaso.text = "Referencia: ${entrada.optString("referencia_traspaso", "No disponible")}"
+
+        // Mostrar datos del traspaso original
+        if (traspasoOriginal != null) {
+            tvNumeroOrdenOTraspaso.text = "N° Traspaso: ${traspasoOriginal.optString("numero_traspaso", "No disponible")}"
+            tvCantidad.text = "Cantidad enviada: ${traspasoOriginal.optInt("cantidad", 0)}"
+            tvFechaSalida.text = "Fecha salida: ${formatDate(traspasoOriginal.optString("fecha_salida", ""))}"
+            tvEstatus.text = "Estatus: ${traspasoOriginal.optString("estatus_validacion", "No disponible").uppercase()}"
+
+            // Información de almacenes - CAMBIO AQUÍ: Usar "codigo" en lugar de "nombre_almacen"
+            val almacenSalidaInfo = traspasoOriginal.optJSONObject("almacen_salida")
+            val almacenEntradaInfo = entrada.optJSONObject("almacen_destino")
+
+            tvAlmacenSalida.text = "Almacén origen: ${almacenSalidaInfo?.optString("codigo", "No disponible") ?: "No disponible"}"
+            tvAlmacenEntrada.text = "Almacén destino: ${almacenEntradaInfo?.optString("codigo", "No disponible") ?: "No disponible"}"
+        } else {
+            tvNumeroOrdenOTraspaso.text = "N° Traspaso: No encontrado"
+            tvCantidad.text = "Cantidad enviada: No disponible"
+            tvFechaSalida.text = "Fecha salida: No disponible"
+            tvEstatus.text = "Estatus: No disponible"
+            tvAlmacenSalida.text = "Almacén origen: No disponible"
+            tvAlmacenEntrada.text = "Almacén destino: No disponible"
+        }
+
+        // Mostrar datos del perfume y proveedor (igual para ambos tipos)
+        displayPerfumeData(perfume)
+        displayProveedorData(proveedor)
+    }
+
+    private fun configurarCamposParaCompra() {
+        // Configurar títulos y visibilidad para tipo COMPRA
+        tvTituloSeccionDos.text = "Orden de Compra"
+
+        // Mostrar campos específicos de orden de compra
+        tvPrecioUnitario.visibility = View.VISIBLE
+        tvPrecioTotal.visibility = View.VISIBLE
+        tvFechaOrden.visibility = View.VISIBLE
+
+        // Ocultar campos específicos de traspaso
+        tvFechaSalida.visibility = View.GONE
+        tvAlmacenSalida.visibility = View.GONE
+        tvAlmacenEntrada.visibility = View.GONE
+        tvReferenciaTraspaso.visibility = View.GONE
+    }
+
+    private fun configurarCamposParaTraspaso() {
+        // Configurar títulos y visibilidad para tipo TRASPASO
+        tvTituloSeccionDos.text = "Información del Traspaso"
+
+        // Ocultar campos específicos de orden de compra
+        tvPrecioUnitario.visibility = View.GONE
+        tvPrecioTotal.visibility = View.GONE
+        tvFechaOrden.visibility = View.GONE
+
+        // Mostrar campos específicos de traspaso
+        tvFechaSalida.visibility = View.VISIBLE
+        tvAlmacenSalida.visibility = View.VISIBLE
+        tvAlmacenEntrada.visibility = View.VISIBLE
+        tvReferenciaTraspaso.visibility = View.VISIBLE
+    }
+
+    private fun displayPerfumeData(perfume: JSONObject?) {
+        // Mostrar datos del perfume (igual para ambos tipos)
         if (perfume != null) {
             tvNombrePerfume.text = "Nombre: ${perfume.optString("name_per", "No disponible")}"
             tvDescripcionPerfume.text = "Descripción: ${perfume.optString("descripcion_per", "No disponible")}"
@@ -331,8 +462,10 @@ class EntradasAuditor : AppCompatActivity() {
             tvFechaExpiracionPerfume.text = "Expira: No disponible"
             tvEstadoPerfume.text = "Estado: No disponible"
         }
+    }
 
-        // Mostrar datos del proveedor
+    private fun displayProveedorData(proveedor: JSONObject?) {
+        // Mostrar datos del proveedor (igual para ambos tipos)
         if (proveedor != null) {
             tvNombreProveedor.text = "Nombre: ${proveedor.optString("nombre_proveedor", "No disponible")}"
             tvRfcProveedor.text = "RFC: ${proveedor.optString("rfc", "No disponible")}"
@@ -352,89 +485,137 @@ class EntradasAuditor : AppCompatActivity() {
         }
     }
 
-    private fun displayValidacionesDetalladas(validacion: JSONObject) {
+    private fun displayValidacionesDetalladasCompra(validacion: JSONObject) {
         try {
-            // RESUMEN EJECUTIVO
-            val resumenEjecutivo = validacion.getJSONObject("resumen_ejecutivo")
-            val estado = resumenEjecutivo.getString("estado")
-            val color = resumenEjecutivo.getString("color")
-            val icono = resumenEjecutivo.getString("icono")
-            val mensajePrincipal = resumenEjecutivo.getString("mensaje_principal")
-            val accionRecomendada = resumenEjecutivo.getString("accion_recomendada")
-            val siguientePaso = resumenEjecutivo.getString("siguiente_paso")
-            val tiempoResolucion = resumenEjecutivo.getString("tiempo_estimado_resolucion")
-            val puedeProceser = resumenEjecutivo.getBoolean("puede_procesar")
+            // RESUMEN EJECUTIVO (igual para ambos tipos)
+            displayResumenEjecutivo(validacion)
 
-            // Estado general con colores
-            tvEstadoValidacion.text = "$icono $estado"
-            val colorInt = when(estado) {
-                "APROBADA" -> android.R.color.holo_green_dark
-                "CONDICIONAL" -> android.R.color.holo_orange_light
-                "REQUIERE_REVISION_GERENCIAL" -> android.R.color.holo_orange_dark
-                "RECHAZADA" -> android.R.color.holo_red_dark
-                else -> android.R.color.darker_gray
-            }
-            tvEstadoValidacion.setTextColor(ContextCompat.getColor(this, colorInt))
-
-            // Información ejecutiva
-            tvMensajePrincipal.text = mensajePrincipal
-            tvAccionRecomendada.text = "Acción: $accionRecomendada"
-            tvSiguientePaso.text = "Siguiente paso: $siguientePaso"
-            tvTiempoResolucion.text = "Tiempo estimado: $tiempoResolucion"
-
-            // Métricas
-            val porcentajeCumplimiento = validacion.getInt("porcentaje_cumplimiento")
-            val nivelRiesgo = validacion.getString("nivel_riesgo")
-
-            tvPorcentajeCumplimiento.text = "Cumplimiento: ${porcentajeCumplimiento}%"
-            tvNivelRiesgo.text = "Riesgo: $nivelRiesgo"
-
-            val colorRiesgo = when(nivelRiesgo) {
-                "BAJO" -> android.R.color.holo_green_dark
-                "MEDIO-BAJO" -> android.R.color.holo_green_light
-                "MEDIO" -> android.R.color.holo_orange_light
-                "ALTO" -> android.R.color.holo_red_dark
-                else -> android.R.color.darker_gray
-            }
-            tvNivelRiesgo.setTextColor(ContextCompat.getColor(this, colorRiesgo))
-
-            // VALIDACIONES INDIVIDUALES
+            // VALIDACIONES INDIVIDUALES para COMPRA
             val proveedorCoincide = validacion.getBoolean("proveedor_coincide")
             val cantidadValida = validacion.getBoolean("cantidad_valida")
             val fechaCoherente = validacion.getBoolean("fecha_coherente")
             val precioCoherente = validacion.getBoolean("precio_coherente")
             val estadoOrdenValido = validacion.getBoolean("estado_orden_valido")
 
-            tvProveedorValidacion.text = "Proveedor: ${if (proveedorCoincide) "✅ Coincide" else "❌ No coincide"}"
-            tvProveedorValidacion.setTextColor(ContextCompat.getColor(this,
+            tvValidacion1.text = "Proveedor: ${if (proveedorCoincide) "✅ Coincide" else "❌ No coincide"}"
+            tvValidacion1.setTextColor(ContextCompat.getColor(this,
                 if (proveedorCoincide) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
 
-            tvCantidadValidacion.text = "Cantidad: ${if (cantidadValida) "✅ Válida" else "❌ Inválida"}"
-            tvCantidadValidacion.setTextColor(ContextCompat.getColor(this,
+            tvValidacion2.text = "Cantidad: ${if (cantidadValida) "✅ Válida" else "❌ Inválida"}"
+            tvValidacion2.setTextColor(ContextCompat.getColor(this,
                 if (cantidadValida) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
 
-            tvFechaValidacion.text = "Fechas: ${if (fechaCoherente) "✅ Coherentes" else "❌ Incoherentes"}"
-            tvFechaValidacion.setTextColor(ContextCompat.getColor(this,
+            tvValidacion3.text = "Fechas: ${if (fechaCoherente) "✅ Coherentes" else "❌ Incoherentes"}"
+            tvValidacion3.setTextColor(ContextCompat.getColor(this,
                 if (fechaCoherente) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
 
-            tvPrecioValidacion.text = "Precio: ${if (precioCoherente) "✅ Coherente" else "❌ Incoherente"}"
-            tvPrecioValidacion.setTextColor(ContextCompat.getColor(this,
+            tvValidacion4.text = "Precio: ${if (precioCoherente) "✅ Coherente" else "❌ Incoherente"}"
+            tvValidacion4.setTextColor(ContextCompat.getColor(this,
                 if (precioCoherente) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
 
-            tvEstadoOrdenValidacion.text = "Estado Orden: ${if (estadoOrdenValido) "✅ Válido" else "❌ Inválido"}"
-            tvEstadoOrdenValidacion.setTextColor(ContextCompat.getColor(this,
+            tvValidacion5.text = "Estado Orden: ${if (estadoOrdenValido) "✅ Válido" else "❌ Inválido"}"
+            tvValidacion5.setTextColor(ContextCompat.getColor(this,
                 if (estadoOrdenValido) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
 
             // DISCREPANCIAS Y OBSERVACIONES
             mostrarDiscrepanciasDetalladas(validacion)
 
-            Log.d("EntradasAuditor", "✅ Validaciones detalladas mostradas: $estado")
+            Log.d("EntradasAuditor", "✅ Validaciones detalladas COMPRA mostradas")
 
         } catch (e: Exception) {
-            Log.e("EntradasAuditor", "❌ Error mostrando validaciones detalladas", e)
+            Log.e("EntradasAuditor", "❌ Error mostrando validaciones detalladas COMPRA", e)
         }
     }
 
+    private fun displayValidacionesDetalladasTraspaso(validacion: JSONObject) {
+        try {
+            // RESUMEN EJECUTIVO (igual para ambos tipos)
+            displayResumenEjecutivo(validacion)
+
+            // VALIDACIONES INDIVIDUALES para TRASPASO
+            val perfumeCoincide = validacion.getBoolean("perfume_coincide")
+            val proveedorCoincide = validacion.getBoolean("proveedor_coincide")
+            val cantidadCoincide = validacion.getBoolean("cantidad_coincide")
+            val fechaCoherente = validacion.getBoolean("fecha_coherente")
+            val almacenesDiferentes = validacion.getBoolean("almacenes_diferentes")
+            val estadoTraspasoValido = validacion.getBoolean("estado_traspaso_valido")
+
+            tvValidacion1.text = "Perfume: ${if (perfumeCoincide) "✅ Coincide" else "❌ No coincide"}"
+            tvValidacion1.setTextColor(ContextCompat.getColor(this,
+                if (perfumeCoincide) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
+
+            tvValidacion2.text = "Cantidad: ${if (cantidadCoincide) "✅ Exacta" else "❌ Diferente"}"
+            tvValidacion2.setTextColor(ContextCompat.getColor(this,
+                if (cantidadCoincide) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
+
+            tvValidacion3.text = "Fechas: ${if (fechaCoherente) "✅ Coherentes" else "❌ Incoherentes"}"
+            tvValidacion3.setTextColor(ContextCompat.getColor(this,
+                if (fechaCoherente) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
+
+            tvValidacion4.text = "Almacenes: ${if (almacenesDiferentes) "✅ Diferentes" else "❌ Iguales"}"
+            tvValidacion4.setTextColor(ContextCompat.getColor(this,
+                if (almacenesDiferentes) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
+
+            tvValidacion5.text = "Estado Traspaso: ${if (estadoTraspasoValido) "✅ Válido" else "❌ Inválido"}"
+            tvValidacion5.setTextColor(ContextCompat.getColor(this,
+                if (estadoTraspasoValido) android.R.color.holo_green_dark else android.R.color.holo_red_dark))
+
+            // DISCREPANCIAS Y OBSERVACIONES
+            mostrarDiscrepanciasDetalladas(validacion)
+
+            Log.d("EntradasAuditor", "✅ Validaciones detalladas TRASPASO mostradas")
+
+        } catch (e: Exception) {
+            Log.e("EntradasAuditor", "❌ Error mostrando validaciones detalladas TRASPASO", e)
+        }
+    }
+
+    private fun displayResumenEjecutivo(validacion: JSONObject) {
+        // RESUMEN EJECUTIVO (igual para ambos tipos)
+        val resumenEjecutivo = validacion.getJSONObject("resumen_ejecutivo")
+        val estado = resumenEjecutivo.getString("estado")
+        val color = resumenEjecutivo.getString("color")
+        val icono = resumenEjecutivo.getString("icono")
+        val mensajePrincipal = resumenEjecutivo.getString("mensaje_principal")
+        val accionRecomendada = resumenEjecutivo.getString("accion_recomendada")
+        val siguientePaso = resumenEjecutivo.getString("siguiente_paso")
+        val tiempoResolucion = resumenEjecutivo.getString("tiempo_estimado_resolucion")
+
+        // Estado general con colores
+        tvEstadoValidacion.text = "$icono $estado"
+        val colorInt = when(estado) {
+            "APROBADA" -> android.R.color.holo_green_dark
+            "CONDICIONAL" -> android.R.color.holo_orange_light
+            "REQUIERE_REVISION_GERENCIAL" -> android.R.color.holo_orange_dark
+            "RECHAZADA" -> android.R.color.holo_red_dark
+            else -> android.R.color.darker_gray
+        }
+        tvEstadoValidacion.setTextColor(ContextCompat.getColor(this, colorInt))
+
+        // Información ejecutiva
+        tvMensajePrincipal.text = mensajePrincipal
+        tvAccionRecomendada.text = "Acción: $accionRecomendada"
+        tvSiguientePaso.text = "Siguiente paso: $siguientePaso"
+        tvTiempoResolucion.text = "Tiempo estimado: $tiempoResolucion"
+
+        // Métricas
+        val porcentajeCumplimiento = validacion.getInt("porcentaje_cumplimiento")
+        val nivelRiesgo = validacion.getString("nivel_riesgo")
+
+        tvPorcentajeCumplimiento.text = "Cumplimiento: ${porcentajeCumplimiento}%"
+        tvNivelRiesgo.text = "Riesgo: $nivelRiesgo"
+
+        val colorRiesgo = when(nivelRiesgo) {
+            "BAJO" -> android.R.color.holo_green_dark
+            "MEDIO-BAJO" -> android.R.color.holo_green_light
+            "MEDIO" -> android.R.color.holo_orange_light
+            "ALTO" -> android.R.color.holo_red_dark
+            else -> android.R.color.darker_gray
+        }
+        tvNivelRiesgo.setTextColor(ContextCompat.getColor(this, colorRiesgo))
+    }
+
+    // El resto de las funciones permanecen iguales...
     private fun mostrarDiscrepanciasDetalladas(validacion: JSONObject) {
         try {
             // Limpiar contenedores
@@ -616,7 +797,14 @@ class EntradasAuditor : AppCompatActivity() {
         // Mostrar diálogo de confirmación
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Confirmar Validación")
-        builder.setMessage("¿Estás seguro de que deseas validar esta entrada?\n\nEsto actualizará:\n• Estado de la orden de compra a 'Completada'\n• Stock del perfume con la cantidad de la entrada\n• Estado de validación de la entrada")
+
+        val mensaje = if (tipoEntradaActual == "Traspaso") {
+            "¿Estás seguro de que deseas validar esta entrada de TRASPASO?\n\nEsto actualizará:\n• Estado del traspaso\n• Stock del perfume con la cantidad de la entrada\n• Estado de validación de la entrada\n• Registros de almacenes"
+        } else {
+            "¿Estás seguro de que deseas validar esta entrada de COMPRA?\n\nEsto actualizará:\n• Estado de la orden de compra a 'Completada'\n• Stock del perfume con la cantidad de la entrada\n• Estado de validación de la entrada"
+        }
+
+        builder.setMessage(mensaje)
 
         builder.setPositiveButton("Validar") { _, _ ->
             ejecutarValidacionEntrada(numeroEntrada)
@@ -699,12 +887,40 @@ class EntradasAuditor : AppCompatActivity() {
             if (success) {
                 // Mostrar información de la validación
                 val entrada = data.getJSONObject("entrada")
-                val ordenCompra = data.getJSONObject("orden_compra")
-                val perfume = data.getJSONObject("perfume")
                 val auditor = data.getJSONObject("auditor")
 
-                val detalleValidacion = """
-                    ✅ VALIDACIÓN COMPLETADA EXITOSAMENTE
+                val detalleValidacion = if (tipoEntradaActual == "Traspaso") {
+                    val traspaso = data.optJSONObject("traspaso")
+                    val perfume = data.getJSONObject("perfume")
+
+                    """
+                    ✅ VALIDACIÓN DE TRASPASO COMPLETADA
+                    
+                    📋 ENTRADA:
+                    • Número: ${entrada.getString("numero_entrada")}
+                    • Estado: ${entrada.getString("estatus_nuevo")}
+                    • Cantidad procesada: ${entrada.getInt("cantidad")}
+                    
+                    🔄 TRASPASO:
+                    • Número: ${traspaso?.optString("numero_traspaso", "No disponible") ?: "No disponible"}
+                    • Estado: ${traspaso?.optString("estado_nuevo", "Validado") ?: "Validado"}
+                    
+                    💎 PERFUME:
+                    • ${perfume.getString("nombre")}
+                    • Stock anterior: ${perfume.getInt("stock_anterior")}
+                    • Stock nuevo: ${perfume.getInt("stock_nuevo")}
+                    • Cantidad agregada: +${perfume.getInt("cantidad_agregada")}
+                    
+                    👤 AUDITOR RESPONSABLE:
+                    • Nombre: ${auditor.optString("nombre", "No disponible")}${if (auditor.optString("apellido", "").isNotEmpty()) " ${auditor.getString("apellido")}" else ""}
+                    • Fecha: ${auditor.optString("fecha_validacion_formateada", formatDate(auditor.optString("fecha_validacion", "")))}
+                    """.trimIndent()
+                } else {
+                    val ordenCompra = data.getJSONObject("orden_compra")
+                    val perfume = data.getJSONObject("perfume")
+
+                    """
+                    ✅ VALIDACIÓN DE COMPRA COMPLETADA
                     
                     📋 ENTRADA:
                     • Número: ${entrada.getString("numero_entrada")}
@@ -724,11 +940,9 @@ class EntradasAuditor : AppCompatActivity() {
                     
                     👤 AUDITOR RESPONSABLE:
                     • Nombre: ${auditor.optString("nombre", "No disponible")}${if (auditor.optString("apellido", "").isNotEmpty()) " ${auditor.getString("apellido")}" else ""}
-                    • Email: ${auditor.optString("email", "No disponible")}
-                    • Rol: ${auditor.optString("rol", "Auditor")}
-                    • ID Usuario: ${auditor.optString("id", "No disponible")}
                     • Fecha: ${auditor.optString("fecha_validacion_formateada", formatDate(auditor.optString("fecha_validacion", "")))}
-                """.trimIndent()
+                    """.trimIndent()
+                }
 
                 // Mostrar diálogo con detalles
                 val builder = androidx.appcompat.app.AlertDialog.Builder(this)
@@ -737,7 +951,7 @@ class EntradasAuditor : AppCompatActivity() {
                 builder.setPositiveButton("Entendido") { dialog, _ ->
                     dialog.dismiss()
                     // Actualizar la vista con los nuevos datos
-                    buscarEntrada(entrada.getString("numero_entrada"))
+                    buscarEntradaInteligente(entrada.getString("numero_entrada"))
                 }
                 builder.show()
 

@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:hint="Número de entrada">
+                    android:hint="Número de entrada (Compra o Traspaso)">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_numero_entrada"
@@ -84,7 +84,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <!-- Tarjeta Entrada -->
+                <!-- Tarjeta Entrada (Actualizada para mostrar tipo) -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,6 +115,17 @@
                         android:textColor="@color/gris_oscuro"
                         android:textStyle="bold"/>
 
+                    <!-- NUEVO: Mostrar tipo de entrada -->
+                    <TextView
+                        android:id="@+id/tv_tipo_entrada"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo: "
+                        android:textColor="@color/lavanda_suave"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginTop="4dp"/>
+
                     <TextView
                         android:id="@+id/tv_cantidad_entrada"
                         android:layout_width="wrap_content"
@@ -136,6 +147,16 @@
                         android:text="Fecha entrada: "
                         android:textColor="@color/gris_oscuro"/>
 
+                    <!-- NUEVO: Campo para referencia de traspaso (inicialmente oculto) -->
+                    <TextView
+                        android:id="@+id/tv_referencia_traspaso"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Referencia: No disponible"
+                        android:textColor="@color/gris_oscuro"
+                        android:textStyle="italic"
+                        android:visibility="gone"/>
+
                     <TextView
                         android:id="@+id/tv_estatus_entrada"
                         android:layout_width="wrap_content"
@@ -145,7 +166,7 @@
                         android:textStyle="bold"/>
                 </LinearLayout>
 
-                <!-- Tarjeta Orden de Compra -->
+                <!-- Tarjeta Orden de Compra / Información de Traspaso (Dinámica) -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -160,7 +181,9 @@
                     android:backgroundTint="@color/white"
                     android:radius="12dp">
 
+                    <!-- MODIFICADO: Título dinámico -->
                     <TextView
+                        android:id="@+id/tv_titulo_seccion_dos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Orden de Compra"
@@ -169,6 +192,7 @@
                         android:textSize="18sp"
                         android:layout_marginBottom="8dp"/>
 
+                    <!-- MODIFICADO: Campo dinámico para número -->
                     <TextView
                         android:id="@+id/tv_numero_orden"
                         android:layout_width="wrap_content"
@@ -184,6 +208,7 @@
                         android:text="Cantidad: "
                         android:textColor="@color/gris_oscuro"/>
 
+                    <!-- Campos específicos para COMPRAS -->
                     <TextView
                         android:id="@+id/tv_precio_unitario"
                         android:layout_width="wrap_content"
@@ -213,6 +238,31 @@
                         android:text="Estatus: "
                         android:textColor="@color/rojo_vino_tenue"
                         android:textStyle="bold"/>
+
+                    <!-- NUEVOS: Campos específicos para TRASPASOS (inicialmente ocultos) -->
+                    <TextView
+                        android:id="@+id/tv_fecha_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha salida: No disponible"
+                        android:textColor="@color/gris_oscuro"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_almacen_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Almacén origen: No disponible"
+                        android:textColor="@color/gris_oscuro"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_almacen_entrada"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Almacén destino: No disponible"
+                        android:textColor="@color/gris_oscuro"
+                        android:visibility="gone"/>
                 </LinearLayout>
 
                 <!-- Tarjeta Perfume -->
@@ -503,7 +553,7 @@
                             android:textSize="14sp"/>
                     </LinearLayout>
 
-                    <!-- VALIDACIONES INDIVIDUALES -->
+                    <!-- VALIDACIONES INDIVIDUALES (Los textos cambiarán dinámicamente) -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -513,11 +563,12 @@
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp"/>
 
+                    <!-- MODIFICADO: Nombres genéricos que cambiarán según el tipo -->
                     <TextView
                         android:id="@+id/tv_proveedor_validacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Proveedor: "
+                        android:text="Validación 1: "
                         android:textColor="@color/gris_oscuro"
                         android:textSize="14sp"/>
 
@@ -541,7 +592,7 @@
                         android:id="@+id/tv_precio_validacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Precio: "
+                        android:text="Validación 4: "
                         android:textColor="@color/gris_oscuro"
                         android:textSize="14sp"/>
 
@@ -549,7 +600,7 @@
                         android:id="@+id/tv_estado_orden_validacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Estado Orden: "
+                        android:text="Estado: "
                         android:textColor="@color/gris_oscuro"
                         android:textSize="14sp"
                         android:layout_marginBottom="16dp"/>
