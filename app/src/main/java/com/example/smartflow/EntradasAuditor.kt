@@ -26,6 +26,9 @@ class EntradasAuditor : AppCompatActivity() {
     private val ENTRADA_ENDPOINT = "$BASE_URL/auditor/entrada"
     private val ENTRADA_TRASPASO_ENDPOINT = "$BASE_URL/auditor/entrada-traspaso"
 
+    // NUEVA RUTA: Rechazar entrada
+    private val RECHAZAR_ENTRADA_ENDPOINT = "$BASE_URL/auditor/rechazar-entrada"
+
     // UI Components principales
     private lateinit var etNumeroEntrada: EditText
     private lateinit var btnBuscarEntrada: Button
@@ -104,6 +107,9 @@ class EntradasAuditor : AppCompatActivity() {
 
     // Botón validar
     private lateinit var btnValidarEntrada: Button
+
+    // Botón rechazar (NUEVO)
+    private lateinit var btnRechazarEntrada: Button
 
     private lateinit var requestQueue: RequestQueue
 
@@ -199,6 +205,9 @@ class EntradasAuditor : AppCompatActivity() {
 
         // Botón validar
         btnValidarEntrada = findViewById(R.id.btn_validar_entrada)
+
+        // Botón rechazar (NUEVO)
+        btnRechazarEntrada = findViewById(R.id.btn_rechazar_entrada)
     }
 
     private fun setupClickListeners() {
@@ -219,6 +228,17 @@ class EntradasAuditor : AppCompatActivity() {
                 procesarValidacionEntrada(numeroEntrada)
             } else {
                 Toast.makeText(this, "No hay entrada seleccionada para validar", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // NUEVO: Listener para botón de rechazo
+        btnRechazarEntrada.setOnClickListener {
+            val numeroEntrada = etNumeroEntrada.text.toString().trim()
+            if (numeroEntrada.isNotEmpty()) {
+                Log.d("EntradasAuditor", "❌ Procesando rechazo para entrada: '$numeroEntrada'")
+                mostrarDialogoRechazo(numeroEntrada)
+            } else {
+                Toast.makeText(this, "No hay entrada seleccionada para rechazar", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -746,26 +766,53 @@ class EntradasAuditor : AppCompatActivity() {
                 btnValidarEntrada.isEnabled = false
                 btnValidarEntrada.text = "✅ Ya Validada"
                 btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
+
+                // Ocultar botón de rechazo
+                btnRechazarEntrada.visibility = View.GONE
+            }
+            estatusValidacion == "rechazado" -> {
+                btnValidarEntrada.isEnabled = false
+                btnValidarEntrada.text = "❌ Ya Rechazada"
+                btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
+
+                // Ocultar botón de rechazo
+                btnRechazarEntrada.visibility = View.GONE
             }
             estado == "RECHAZADA" || !puedeProceser -> {
                 btnValidarEntrada.isEnabled = false
                 btnValidarEntrada.text = "❌ No se puede validar"
                 btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
+
+                // Mostrar botón de rechazo disponible
+                btnRechazarEntrada.visibility = View.VISIBLE
+                btnRechazarEntrada.isEnabled = true
             }
             estado == "REQUIERE_REVISION_GERENCIAL" -> {
                 btnValidarEntrada.isEnabled = true
                 btnValidarEntrada.text = "⚠️ Validar (Requiere Aprobación)"
                 btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_orange_dark)
+
+                // Mostrar botón de rechazo disponible
+                btnRechazarEntrada.visibility = View.VISIBLE
+                btnRechazarEntrada.isEnabled = true
             }
             estado == "CONDICIONAL" -> {
                 btnValidarEntrada.isEnabled = true
                 btnValidarEntrada.text = "⚡ Validar con Observaciones"
                 btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_orange_light)
+
+                // Mostrar botón de rechazo disponible
+                btnRechazarEntrada.visibility = View.VISIBLE
+                btnRechazarEntrada.isEnabled = true
             }
             else -> {
                 btnValidarEntrada.isEnabled = true
                 btnValidarEntrada.text = "✅ Validar Entrada"
                 btnValidarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, R.color.lavanda_suave)
+
+                // Mostrar botón de rechazo disponible
+                btnRechazarEntrada.visibility = View.VISIBLE
+                btnRechazarEntrada.isEnabled = true
             }
         }
     }
@@ -799,7 +846,7 @@ class EntradasAuditor : AppCompatActivity() {
         builder.setTitle("Confirmar Validación")
 
         val mensaje = if (tipoEntradaActual == "Traspaso") {
-            "¿Estás seguro de que deseas validar esta entrada de TRASPASO?\n\nEsto actualizará:\n• Estado del traspaso\n• Stock del perfume con la cantidad de la entrada\n• Estado de validación de la entrada\n• Registros de almacenes"
+            "¿Estás seguro de que deseas validar esta entrada de TRASPASO?\n\nEsto actualizará:\n• Estado del traspaso a 'Validado'\n• Stock del perfume con la cantidad de la entrada\n• Estado de validación de la entrada\n• Registros de almacenes"
         } else {
             "¿Estás seguro de que deseas validar esta entrada de COMPRA?\n\nEsto actualizará:\n• Estado de la orden de compra a 'Completada'\n• Stock del perfume con la cantidad de la entrada\n• Estado de validación de la entrada"
         }
@@ -900,10 +947,14 @@ class EntradasAuditor : AppCompatActivity() {
                     • Número: ${entrada.getString("numero_entrada")}
                     • Estado: ${entrada.getString("estatus_nuevo")}
                     • Cantidad procesada: ${entrada.getInt("cantidad")}
+                    • Referencia: ${entrada.optString("referencia_traspaso", "No disponible")}
                     
                     🔄 TRASPASO:
                     • Número: ${traspaso?.optString("numero_traspaso", "No disponible") ?: "No disponible"}
-                    • Estado: ${traspaso?.optString("estado_nuevo", "Validado") ?: "Validado"}
+                    • Estado anterior: ${traspaso?.optString("estado_anterior", "No disponible") ?: "No disponible"}
+                    • Estado nuevo: ${traspaso?.optString("estado_nuevo", "Validado") ?: "Validado"}
+                    • Almacén origen: ${traspaso?.optString("almacen_origen", "No disponible") ?: "No disponible"}
+                    • Almacén destino: ${traspaso?.optString("almacen_destino", "No disponible") ?: "No disponible"}
                     
                     💎 PERFUME:
                     • ${perfume.getString("nombre")}
@@ -964,6 +1015,201 @@ class EntradasAuditor : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("EntradasAuditor", "❌ Error procesando respuesta de validación", e)
             showError("Error procesando la respuesta de validación: ${e.message}")
+        }
+    }
+
+    // ============================================================================
+    // FUNCIONES DE RECHAZO DE ENTRADA (NUEVAS)
+    // ============================================================================
+
+    private fun mostrarDialogoRechazo(numeroEntrada: String) {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Rechazar Entrada")
+
+        // Crear input para motivo de rechazo
+        val input = EditText(this)
+        input.hint = "Motivo del rechazo (opcional)"
+        input.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        input.maxLines = 3
+        builder.setView(input)
+
+        val mensaje = if (tipoEntradaActual == "Traspaso") {
+            "¿Estás seguro de que deseas RECHAZAR esta entrada de TRASPASO?\n\nEsto actualizará:\n• Estado del traspaso a 'Rechazado'\n• Estado de validación de la entrada a 'rechazado'\n• NO SE MODIFICARÁ el stock del perfume\n• Se registrará el motivo del rechazo"
+        } else {
+            "¿Estás seguro de que deseas RECHAZAR esta entrada de COMPRA?\n\nEsto actualizará:\n• Estado de la orden de compra a 'Cancelada'\n• Estado de validación de la entrada a 'rechazado'\n• NO SE MODIFICARÁ el stock del perfume\n• Se registrará el motivo del rechazo"
+        }
+
+        builder.setMessage(mensaje)
+
+        builder.setPositiveButton("Rechazar") { _, _ ->
+            val motivoRechazo = input.text.toString().trim()
+            ejecutarRechazoEntrada(numeroEntrada, motivoRechazo)
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun ejecutarRechazoEntrada(numeroEntrada: String, motivoRechazo: String) {
+        showLoading(true)
+        btnRechazarEntrada.isEnabled = false
+        btnRechazarEntrada.text = "Procesando..."
+
+        val token = getAuthToken()
+        if (token.isNullOrEmpty()) {
+            showError("Token de autenticación no encontrado")
+            return
+        }
+
+        val url = "$RECHAZAR_ENTRADA_ENDPOINT/$numeroEntrada"
+        Log.d("EntradasAuditor", "❌ Procesando rechazo en: $url")
+
+        // Crear el JSON con el motivo de rechazo
+        val requestBody = JSONObject()
+        if (motivoRechazo.isNotEmpty()) {
+            requestBody.put("motivo_rechazo", motivoRechazo)
+        }
+
+        val request = object : JsonObjectRequest(
+            Request.Method.POST,
+            url,
+            requestBody,
+            { response ->
+                Log.d("EntradasAuditor", "❌ Rechazo procesado exitosamente: $response")
+                showLoading(false)
+                btnRechazarEntrada.isEnabled = false
+                btnRechazarEntrada.text = "❌ Rechazada"
+                btnRechazarEntrada.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
+
+                handleRechazoResponse(response)
+            },
+            { error ->
+                Log.e("EntradasAuditor", "❌ Error en rechazo", error)
+                Log.e("EntradasAuditor", "❌ Status code: ${error.networkResponse?.statusCode}")
+
+                val responseData = error.networkResponse?.data?.toString(Charsets.UTF_8)
+                Log.e("EntradasAuditor", "❌ Response body: $responseData")
+
+                showLoading(false)
+                btnRechazarEntrada.isEnabled = true
+                btnRechazarEntrada.text = "❌ Rechazar Entrada"
+
+                val errorMessage = when (error.networkResponse?.statusCode) {
+                    400 -> "El rechazo no pudo completarse. Verifica los datos"
+                    401 -> "No autorizado. Inicia sesión nuevamente"
+                    403 -> "No tienes permisos para rechazar entradas"
+                    404 -> "Entrada no encontrada"
+                    500 -> "Error interno del servidor"
+                    else -> "Error de conexión. Verifica tu internet"
+                }
+
+                showError(errorMessage)
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                headers["Content-Type"] = "application/json"
+                return headers
+            }
+        }
+
+        requestQueue.add(request)
+    }
+
+    private fun handleRechazoResponse(response: JSONObject) {
+        try {
+            val success = response.getBoolean("success")
+            val message = response.getString("message")
+            val data = response.getJSONObject("data")
+
+            if (success) {
+                // Mostrar información del rechazo
+                val entrada = data.getJSONObject("entrada")
+                val auditor = data.getJSONObject("auditor")
+
+                val detalleRechazo = if (tipoEntradaActual == "Traspaso") {
+                    val traspaso = data.optJSONObject("traspaso")
+                    val perfume = data.getJSONObject("perfume")
+
+                    """
+                    ❌ RECHAZO DE TRASPASO COMPLETADO
+                    
+                    📋 ENTRADA:
+                    • Número: ${entrada.getString("numero_entrada")}
+                    • Estado anterior: ${entrada.getString("estatus_anterior")}
+                    • Estado nuevo: ${entrada.getString("estatus_nuevo")}
+                    • Cantidad: ${entrada.getInt("cantidad")}
+                    • Motivo: ${entrada.getString("motivo_rechazo")}
+                    
+                    🔄 TRASPASO:
+                    • Número: ${traspaso?.optString("numero_traspaso", "No disponible") ?: "No disponible"}
+                    • Estado anterior: ${traspaso?.optString("estado_anterior", "No disponible") ?: "No disponible"}
+                    • Estado nuevo: ${traspaso?.optString("estado_nuevo", "Rechazado") ?: "Rechazado"}
+                    • Almacén origen: ${traspaso?.optString("almacen_origen", "No disponible") ?: "No disponible"}
+                    • Almacén destino: ${traspaso?.optString("almacen_destino", "No disponible") ?: "No disponible"}
+                    
+                    💎 PERFUME:
+                    • ${perfume.getString("nombre")}
+                    • Stock NO modificado
+                    
+                    👤 AUDITOR RESPONSABLE:
+                    • Nombre: ${auditor.optString("nombre", "No disponible")}${if (auditor.optString("apellido", "").isNotEmpty()) " ${auditor.getString("apellido")}" else ""}
+                    • Fecha: ${auditor.optString("fecha_rechazo_formateada", formatDate(auditor.optString("fecha_rechazo", "")))}
+                    """.trimIndent()
+                } else {
+                    val ordenCompra = data.optJSONObject("orden_compra")
+                    val perfume = data.getJSONObject("perfume")
+
+                    """
+                    ❌ RECHAZO DE COMPRA COMPLETADO
+                    
+                    📋 ENTRADA:
+                    • Número: ${entrada.getString("numero_entrada")}
+                    • Estado anterior: ${entrada.getString("estatus_anterior")}
+                    • Estado nuevo: ${entrada.getString("estatus_nuevo")}
+                    • Cantidad: ${entrada.getInt("cantidad")}
+                    • Motivo: ${entrada.getString("motivo_rechazo")}
+                    
+                    🛒 ORDEN DE COMPRA:
+                    • Número: ${ordenCompra?.optString("numero_orden", "No disponible") ?: "No disponible"}
+                    • Estado anterior: ${ordenCompra?.optString("estado_anterior", "No disponible") ?: "No disponible"}
+                    • Estado nuevo: ${ordenCompra?.optString("estado_nuevo", "Cancelada") ?: "Cancelada"}
+                    • Observaciones: ${ordenCompra?.optString("observaciones", "No disponible") ?: "No disponible"}
+                    
+                    💎 PERFUME:
+                    • ${perfume.getString("nombre")}
+                    • Stock NO modificado
+                    
+                    👤 AUDITOR RESPONSABLE:
+                    • Nombre: ${auditor.optString("nombre", "No disponible")}${if (auditor.optString("apellido", "").isNotEmpty()) " ${auditor.getString("apellido")}" else ""}
+                    • Fecha: ${auditor.optString("fecha_rechazo_formateada", formatDate(auditor.optString("fecha_rechazo", "")))}
+                    """.trimIndent()
+                }
+
+                // Mostrar diálogo con detalles
+                val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+                builder.setTitle("Rechazo Completado")
+                builder.setMessage(detalleRechazo)
+                builder.setPositiveButton("Entendido") { dialog, _ ->
+                    dialog.dismiss()
+                    // Actualizar la vista con los nuevos datos
+                    buscarEntradaInteligente(entrada.getString("numero_entrada"))
+                }
+                builder.show()
+
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+
+            } else {
+                showError("Error en el rechazo: $message")
+            }
+
+        } catch (e: Exception) {
+            Log.e("EntradasAuditor", "❌ Error procesando respuesta de rechazo", e)
+            showError("Error procesando la respuesta de rechazo: ${e.message}")
         }
     }
 
