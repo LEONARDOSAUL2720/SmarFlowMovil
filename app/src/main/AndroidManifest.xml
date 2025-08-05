@@ -34,6 +34,8 @@
         <activity android:name=".MainEmpleadoActivity"/>
         <activity android:name=".OrdenesCompra"/>
         <activity android:name="EntradasAuditor"/>
+        <activity android:name=".StockAuditor"/>
+        <activity android:name=".Perfil"/>
 
     </application>
 

@@ -59,7 +59,6 @@ class MainAuditorActivity : AppCompatActivity() {
 
         // Botón para abrir el menú lateral desde el header
         val btnOpenDrawer = findViewById<ImageButton>(R.id.btn_open_drawer)
-        btnOpenDrawer.setImageResource(android.R.drawable.ic_menu_sort_by_size) // Ícono estándar
         btnOpenDrawer.setOnClickListener {
             drawerLayout.openDrawer(navView)
         }
@@ -203,6 +202,16 @@ class MainAuditorActivity : AppCompatActivity() {
                     logout()
                     true
                 }
+                R.id.nav_stock -> {
+                    val intent = Intent(this, StockAuditor::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_perfil -> {
+                    val intent = Intent(this, Perfil::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }
@@ -252,6 +261,13 @@ class MainAuditorActivity : AppCompatActivity() {
         if (item.itemId == android.R.id.home) {
             drawerLayout.openDrawer(navView)
             return true
+        }
+        when (item.itemId) {
+            R.id.nav_stock -> {
+                val intent = Intent(this, StockAuditor::class.java)
+                startActivity(intent)
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }

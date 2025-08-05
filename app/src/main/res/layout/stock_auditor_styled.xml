@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gris_perla_claro"
+    android:layout_marginTop="35dp">
+
+    <!-- AppBarLayout que se oculta al hacer scroll -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gris_perla_claro"
+        app:elevation="0dp">
+
+        <!-- Contenido que se oculta al hacer scroll -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <!-- Campo de búsqueda con estilo mejorado -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/white">
+
+                <EditText
+                    android:id="@+id/et_buscar_perfume"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Buscar perfume por nombre, marca, código o SKU"
+                    android:drawableStart="@android:drawable/ic_menu_search"
+                    android:drawableTint="@color/lavanda_suave"
+                    android:padding="16dp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/gris_oscuro"
+                    android:textColorHint="@color/gris_oscuro"
+                    android:textSize="16sp"
+                    android:inputType="text"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Contenedor de filtros con estilo mejorado -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔍 Filtros de Búsqueda"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/lavanda_suave"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- Filtro por Almacén -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:text="🏪 Almacén:"
+                            android:textStyle="bold"
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"/>
+
+                        <Spinner
+                            android:id="@+id/spinner_filtro_almacen"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/spinner_background"/>
+                    </LinearLayout>
+
+                    <!-- Filtro por Categoría -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:text="🏷️ Categoría:"
+                            android:textStyle="bold"
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"/>
+
+                        <Spinner
+                            android:id="@+id/spinner_filtro_categoria"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/spinner_background"/>
+                    </LinearLayout>
+
+                    <!-- Filtro por Estado -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:text="📊 Estado:"
+                            android:textStyle="bold"
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"/>
+
+                        <Spinner
+                            android:id="@+id/spinner_filtro_estado"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/spinner_background"/>
+                    </LinearLayout>
+
+                    <!-- Botón para limpiar filtros -->
+                    <Button
+                        android:id="@+id/btn_limpiar_filtros"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="🗑️ Limpiar Filtros"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="@color/oro_palido"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:paddingHorizontal="24dp"
+                        android:elevation="2dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Información de resultados con estilo -->
+            <TextView
+                android:id="@+id/tv_info_resultados"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🔄 Cargando perfumes..."
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:textColor="@color/gris_oscuro"
+                android:background="@color/white"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp"
+                android:drawablePadding="8dp"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenido principal con RecyclerView -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Lista de perfumes -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_perfumes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false"
+                android:paddingBottom="8dp"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ProgressBar para indicar carga (flotante) -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/lavanda_suave"
+        android:visibility="gone"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

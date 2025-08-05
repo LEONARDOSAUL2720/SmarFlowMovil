@@ -9,10 +9,19 @@
         android:id="@+id/nav_entradas"
         android:title="Entradas"
         android:icon="@drawable/ic_entradas" />
+    <item
+        android:id="@+id/nav_stock"
+        android:title="Stock"
+        android:icon="@drawable/ic_stock" />
+    <item
+        android:id="@+id/nav_perfil"
+        android:title="Stock"
+        android:icon="@drawable/ic_perfil" />
 
     <item
         android:id="@+id/nav_opcion3"
-        android:title="Cerrar Sesión"/>
+        android:title="Cerrar Sesión"
+        android:icon="@drawable/ic_outh"/>
 <!--        android:icon="@drawable/ic_logout"-->
 
 
