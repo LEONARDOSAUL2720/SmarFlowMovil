@@ -8,4 +8,11 @@
     <color name="oro_palido">#D4AF37</color>
     <color name="verde_salvia">#9DBF9E</color>
     <color name="rojo_vino_tenue">#B75D69</color>
+
+    <!-- Colores adicionales para estados -->
+    <color name="verde_muy_claro">#E8F5E8</color>
+    <color name="rojo_muy_claro">#F5E8EA</color>
+    <color name="oro_muy_claro">#F9F5E8</color>
+    <color name="gris_perla">#E0E0E0</color>
+    <color name="gris_medio">#757575</color>
 </resources>

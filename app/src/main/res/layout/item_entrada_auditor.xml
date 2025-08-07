@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:id="@+id/container_entrada_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/rounded_background"
+        android:backgroundTint="@color/gris_perla_claro">
+
+        <!-- Header con número y tipo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/tv_numero_entrada_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="N° E001"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/gris_oscuro" />
+
+            <TextView
+                android:id="@+id/tv_tipo_entrada_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COMPRA"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/verde_salvia"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/verde_muy_claro"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp" />
+
+        </LinearLayout>
+
+        <!-- Información principal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/tv_cantidad_entrada_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cantidad: 100"
+                android:textSize="14sp"
+                android:textColor="@color/gris_oscuro"
+                android:layout_marginBottom="4dp" />
+
+            <!-- CAMPO DEL PERFUME -->
+            <TextView
+                android:id="@+id/tv_perfume_entrada_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Perfume: Carolina Herrera 212"
+                android:textSize="14sp"
+                android:textColor="@color/gris_oscuro"
+                android:textStyle="italic"
+                android:layout_marginBottom="4dp"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tv_proveedor_entrada_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Proveedor Ejemplo S.A."
+                android:textSize="14sp"
+                android:textColor="@color/gris_oscuro"
+                android:layout_marginBottom="4dp"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tv_fecha_entrada_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fecha: 15/12/2024"
+                android:textSize="13sp"
+                android:textColor="@color/gris_medio"
+                android:layout_marginBottom="4dp" />
+
+            <!-- NUEVOS CAMPOS PARA TRASPASOS -->
+
+            <!-- Referencia de traspaso (solo visible para traspasos) -->
+            <TextView
+                android:id="@+id/tv_referencia_traspaso_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ref: TRP-001"
+                android:textSize="13sp"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="italic"
+                android:layout_marginBottom="4dp"
+                android:visibility="gone" />
+
+            <!-- Almacén de origen (solo para traspasos) -->
+            <TextView
+                android:id="@+id/tv_almacen_origen_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Origen: Almacén Principal"
+                android:textSize="13sp"
+                android:textColor="@color/gris_medio"
+                android:textStyle="normal"
+                android:layout_marginBottom="2dp"
+                android:visibility="gone"
+                android:drawableStart="@android:drawable/ic_menu_send"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/lavanda_suave" />
+
+            <!-- Almacén de destino (solo para traspasos) -->
+            <TextView
+                android:id="@+id/tv_almacen_destino_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Destino: Almacén Sucursal Norte"
+                android:textSize="13sp"
+                android:textColor="@color/gris_medio"
+                android:textStyle="normal"
+                android:layout_marginBottom="2dp"
+                android:visibility="gone"
+                android:drawableStart="@android:drawable/ic_menu_mylocation"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/lavanda_suave" />
+
+            <!-- Fecha de salida (solo para traspasos) -->
+            <TextView
+                android:id="@+id/tv_fecha_salida_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fecha Salida: 14/12/2024"
+                android:textSize="13sp"
+                android:textColor="@color/gris_medio"
+                android:textStyle="normal"
+                android:layout_marginBottom="4dp"
+                android:visibility="gone"
+                android:drawableStart="@android:drawable/ic_menu_recent_history"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/lavanda_suave" />
+
+        </LinearLayout>
+
+        <!-- Footer con estatus -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/gris_perla" />
+
+            <TextView
+                android:id="@+id/tv_estatus_entrada_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REGISTRADO"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/oro_palido"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/oro_muy_claro"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

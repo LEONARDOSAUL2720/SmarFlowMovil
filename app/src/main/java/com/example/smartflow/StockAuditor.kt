@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
@@ -289,28 +291,73 @@ class StockAuditor : AppCompatActivity() {
         }
 
         Log.d("StockAuditor", "🔗 URL de consulta: $url")
+        Log.d("StockAuditor", "📱 Token enviado: ${token.take(20)}...")
 
         val request = object : JsonObjectRequest(
             Request.Method.GET,
             url,
             null,
-            { response ->
+            JsonObjectRequest@{ response ->
                 try {
-                    Log.d("StockAuditor", "✅ Perfumes recibidos: $response")
+                    Log.d("StockAuditor", "✅ Response completa recibida: $response")
                     showLoading(false)
 
+                    // Verificar estructura de respuesta
+                    if (!response.has("success")) {
+                        Log.e("StockAuditor", "❌ Respuesta no tiene campo 'success'")
+                        showError("Formato de respuesta inválido")
+                        return@JsonObjectRequest
+                    }
+
+                    val success = response.getBoolean("success")
+                    if (!success) {
+                        Log.e("StockAuditor", "❌ API reportó error: ${response.optString("message", "Error desconocido")}")
+                        showError("Error del servidor: ${response.optString("message", "Error desconocido")}")
+                        return@JsonObjectRequest
+                    }
+
                     val data = response.getJSONObject("data")
+                    Log.d("StockAuditor", "📊 Objeto data: $data")
+
                     val perfumesArray = data.getJSONArray("perfumes")
                     val metadatos = data.getJSONObject("metadatos")
+
+                    Log.d("StockAuditor", "📊 Total perfumes en response: ${perfumesArray.length()}")
+                    Log.d("StockAuditor", "📊 Metadatos: $metadatos")
+
+                    // Log del primer perfume para verificar estructura
+                    if (perfumesArray.length() > 0) {
+                        val primerPerfume = perfumesArray.getJSONObject(0)
+                        Log.d("StockAuditor", "📋 Primer perfume recibido: $primerPerfume")
+                        Log.d("StockAuditor", "🔍 Claves del primer perfume: ${primerPerfume.keys().asSequence().toList()}")
+
+                        // Verificar campos específicos
+                        Log.d("StockAuditor", "🔍 Verificando campos del primer perfume:")
+                        Log.d("StockAuditor", "   - name_per: ${if (primerPerfume.has("name_per")) primerPerfume.optString("name_per") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - categoria_per: ${if (primerPerfume.has("categoria_per")) primerPerfume.optString("categoria_per") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - marca: ${if (primerPerfume.has("marca")) primerPerfume.optString("marca") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - stock_per: ${if (primerPerfume.has("stock_per")) primerPerfume.optInt("stock_per") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - stock_minimo_per: ${if (primerPerfume.has("stock_minimo_per")) primerPerfume.optInt("stock_minimo_per") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - precio_venta_per: ${if (primerPerfume.has("precio_venta_per")) primerPerfume.optDouble("precio_venta_per") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - ubicacion_per: ${if (primerPerfume.has("ubicacion_per")) primerPerfume.optString("ubicacion_per") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - estado: ${if (primerPerfume.has("estado")) primerPerfume.optString("estado") else "FALTANTE"}")
+                        Log.d("StockAuditor", "   - _id: ${if (primerPerfume.has("_id")) primerPerfume.optString("_id") else "FALTANTE"}")
+                    }
 
                     // Convertir JSONArray a List<JSONObject>
                     val listaPerfumes = mutableListOf<JSONObject>()
                     for (i in 0 until perfumesArray.length()) {
-                        listaPerfumes.add(perfumesArray.getJSONObject(i))
+                        val perfume = perfumesArray.getJSONObject(i)
+                        listaPerfumes.add(perfume)
+                        Log.d("StockAuditor", "📦 Perfume $i agregado a lista: ${perfume.optString("name_per", "SIN NOMBRE")}")
                     }
 
-                    // Actualizar adapter
+                    Log.d("StockAuditor", "📦 Lista convertida, tamaño final: ${listaPerfumes.size}")
+
+                    // Actualizar adapter CON LOG
+                    Log.d("StockAuditor", "🔄 Enviando lista al adapter...")
                     perfumesAdapter.updatePerfumes(listaPerfumes)
+                    Log.d("StockAuditor", "✅ Adapter actualizado")
 
                     // Actualizar información de resultados
                     val total = metadatos.getInt("total")
@@ -342,15 +389,29 @@ class StockAuditor : AppCompatActivity() {
                     tvInfoResultados.setTextColor(getColor(R.color.verde_salvia))
 
                     Log.d("StockAuditor", "✅ Se cargaron ${listaPerfumes.size} perfumes de $total totales")
+                    Log.d("StockAuditor", "📱 Texto de resultados actualizado: $infoText")
+
+                    // Verificar estado final del RecyclerView
+                    Log.d("StockAuditor", "🔍 Estado final del RecyclerView:")
+                    Log.d("StockAuditor", "   - Adapter item count: ${perfumesAdapter.itemCount}")
+                    Log.d("StockAuditor", "   - RecyclerView visibility: ${if (rvPerfumes.visibility == View.VISIBLE) "VISIBLE" else "GONE/INVISIBLE"}")
+                    Log.d("StockAuditor", "   - ProgressBar visibility: ${if (progressBar.visibility == View.VISIBLE) "VISIBLE" else "GONE/INVISIBLE"}")
 
                 } catch (e: Exception) {
                     Log.e("StockAuditor", "❌ Error procesando perfumes", e)
+                    Log.e("StockAuditor", "🔍 Stack trace completo:", e)
                     showLoading(false)
                     showError("Error procesando los datos: ${e.message}")
                 }
             },
             { error ->
                 Log.e("StockAuditor", "❌ Error cargando perfumes", error)
+                Log.e("StockAuditor", "🔍 Detalles del error de red:")
+                Log.e("StockAuditor", "   - Código de estado: ${error.networkResponse?.statusCode}")
+                Log.e("StockAuditor", "   - Datos de respuesta: ${error.networkResponse?.data?.let { String(it) }}")
+                Log.e("StockAuditor", "   - Headers: ${error.networkResponse?.headers}")
+                Log.e("StockAuditor", "   - Mensaje del error: ${error.message}")
+
                 showLoading(false)
 
                 val errorMessage = when (error.networkResponse?.statusCode) {
@@ -367,10 +428,12 @@ class StockAuditor : AppCompatActivity() {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Bearer $token"
                 headers["Content-Type"] = "application/json"
+                Log.d("StockAuditor", "📤 Headers enviados: $headers")
                 return headers
             }
         }
 
+        Log.d("StockAuditor", "📤 Enviando request a la API...")
         requestQueue.add(request)
     }
 

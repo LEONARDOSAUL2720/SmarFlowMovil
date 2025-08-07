@@ -28,6 +28,7 @@
 
             <!-- Sección de Búsqueda -->
             <LinearLayout
+                android:id="@+id/container_busqueda"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -43,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Buscar Entrada"
+                    android:text="Buscar Entrada Específica"
                     android:textColor="@color/lavanda_suave"
                     android:textStyle="bold"
                     android:textSize="18sp"
@@ -76,7 +77,175 @@
                     android:padding="12dp"/>
             </LinearLayout>
 
-            <!-- Contenedor de Detalles (inicialmente oculto) -->
+            <!-- SECCIÓN: Lista de Entradas (se ocultará al seleccionar entrada específica) -->
+            <LinearLayout
+                android:id="@+id/container_lista_entradas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:elevation="2dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="2dp"
+                android:clipToPadding="false"
+                android:backgroundTint="@color/white"
+                android:radius="12dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📋 Lista de Entradas"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Filtros para la lista -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_filtro_tipo"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/rounded_background"
+                        android:backgroundTint="@color/gris_perla_claro"
+                        android:padding="8dp"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_filtro_estatus_lista"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/rounded_background"
+                        android:backgroundTint="@color/gris_perla_claro"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <!-- Botones de control -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btn_cargar_entradas"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="🔄 Actualizar"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/verde_salvia"
+                        android:elevation="2dp"
+                        android:padding="8dp"/>
+
+                    <Button
+                        android:id="@+id/btn_limpiar_filtros_lista"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="🗑️ Limpiar"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/rojo_vino_tenue"
+                        android:elevation="2dp"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <!-- Información de resultados -->
+                <TextView
+                    android:id="@+id/tv_info_entradas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Cargando entradas..."
+                    android:textColor="@color/verde_salvia"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/gris_perla_claro"
+                    android:padding="8dp"
+                    android:radius="8dp"/>
+
+                <!-- ProgressBar para lista -->
+                <ProgressBar
+                    android:id="@+id/progress_bar_lista"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"/>
+
+                <!-- RecyclerView para mostrar las entradas -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_entradas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:nestedScrollingEnabled="false"
+                    android:minHeight="400dp"/>
+
+                <!-- Controles de paginación -->
+                <LinearLayout
+                    android:id="@+id/layout_paginacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btn_pagina_anterior"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◀ Anterior"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/lavanda_suave"
+                        android:layout_marginEnd="16dp"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_pagina_actual"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Página 1 de 1"
+                        android:textColor="@color/gris_oscuro"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginHorizontal="16dp"/>
+
+                    <Button
+                        android:id="@+id/btn_pagina_siguiente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Siguiente ▶"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/lavanda_suave"
+                        android:layout_marginStart="16dp"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Contenedor de Detalles Completos (inicialmente oculto) -->
             <LinearLayout
                 android:id="@+id/container_detalles"
                 android:layout_width="match_parent"
@@ -84,7 +253,41 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <!-- Tarjeta Entrada (Actualizada para mostrar tipo) -->
+                <!-- NUEVO: Botón para volver a la lista -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start"
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btn_volver_lista"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◀ Volver a Lista"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/gris_oscuro"
+                        android:elevation="2dp"
+                        android:padding="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📋 Detalles Completos de Entrada"
+                        android:textColor="@color/lavanda_suave"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="8dp"/>
+
+                </LinearLayout>
+
+                <!-- Tarjeta Información de Entrada -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,7 +318,6 @@
                         android:textColor="@color/gris_oscuro"
                         android:textStyle="bold"/>
 
-                    <!-- NUEVO: Mostrar tipo de entrada -->
                     <TextView
                         android:id="@+id/tv_tipo_entrada"
                         android:layout_width="wrap_content"
@@ -147,7 +349,6 @@
                         android:text="Fecha entrada: "
                         android:textColor="@color/gris_oscuro"/>
 
-                    <!-- NUEVO: Campo para referencia de traspaso (inicialmente oculto) -->
                     <TextView
                         android:id="@+id/tv_referencia_traspaso"
                         android:layout_width="wrap_content"
@@ -181,7 +382,7 @@
                     android:backgroundTint="@color/white"
                     android:radius="12dp">
 
-                    <!-- MODIFICADO: Título dinámico -->
+                    <!-- Título dinámico -->
                     <TextView
                         android:id="@+id/tv_titulo_seccion_dos"
                         android:layout_width="wrap_content"
@@ -192,7 +393,7 @@
                         android:textSize="18sp"
                         android:layout_marginBottom="8dp"/>
 
-                    <!-- MODIFICADO: Campo dinámico para número -->
+                    <!-- Campo dinámico para número -->
                     <TextView
                         android:id="@+id/tv_numero_orden"
                         android:layout_width="wrap_content"
@@ -239,7 +440,7 @@
                         android:textColor="@color/rojo_vino_tenue"
                         android:textStyle="bold"/>
 
-                    <!-- NUEVOS: Campos específicos para TRASPASOS (inicialmente ocultos) -->
+                    <!-- Campos específicos para TRASPASOS (inicialmente ocultos) -->
                     <TextView
                         android:id="@+id/tv_fecha_salida"
                         android:layout_width="wrap_content"
@@ -430,7 +631,7 @@
                         android:textStyle="bold"/>
                 </LinearLayout>
 
-                <!-- ACTUALIZADO: Contenedor de botones de acción -->
+                <!-- Contenedor de botones de acción -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -452,7 +653,7 @@
                         android:elevation="2dp"
                         android:padding="12dp"/>
 
-                    <!-- NUEVO: Botón para rechazar entrada -->
+                    <!-- Botón para rechazar entrada -->
                     <Button
                         android:id="@+id/btn_rechazar_entrada"
                         android:layout_width="match_parent"
@@ -468,7 +669,7 @@
                         android:visibility="gone"/>
                 </LinearLayout>
 
-                <!-- Tarjeta de Validaciones ACTUALIZADA -->
+                <!-- Tarjeta de Validaciones Completa -->
                 <LinearLayout
                     android:id="@+id/card_validaciones"
                     android:layout_width="match_parent"
@@ -576,7 +777,7 @@
                             android:textSize="14sp"/>
                     </LinearLayout>
 
-                    <!-- VALIDACIONES INDIVIDUALES (Los textos cambiarán dinámicamente) -->
+                    <!-- VALIDACIONES INDIVIDUALES -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -586,7 +787,6 @@
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp"/>
 
-                    <!-- MODIFICADO: Nombres genéricos que cambiarán según el tipo -->
                     <TextView
                         android:id="@+id/tv_proveedor_validacion"
                         android:layout_width="wrap_content"
