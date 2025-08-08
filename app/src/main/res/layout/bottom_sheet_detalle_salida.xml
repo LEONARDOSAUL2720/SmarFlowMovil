@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/white">
+
+    <!-- Handle del bottom sheet -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/gray"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.5" />
+
+    <!-- Título -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📋 Detalle de Salida"
+        android:textColor="@color/lavanda_suave"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp" />
+
+    <!-- ScrollView para contenido -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="500dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Información básica -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_background_salidas"
+                android:backgroundTint="@color/gris_perla_claro"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📄 Información General"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Número de salida -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Número:"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewNumeroSalida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SAL-001"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <!-- Perfume -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Perfume:"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewNombrePerfume"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Carolina Herrera 212"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:gravity="end" />
+
+                </LinearLayout>
+
+                <!-- Cantidad -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cantidad:"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewCantidad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="40"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <!-- Tipo -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tipo:"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewTipo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Merma"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <!-- Almacén -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Almacén:"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewAlmacen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ALM003"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <!-- Fecha -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fecha:"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewFecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="07/08/2025 05:07"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Información específica por tipo -->
+            <LinearLayout
+                android:id="@+id/layoutInformacionEspecifica"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_background_salidas"
+                android:backgroundTint="@color/gris_perla_claro"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📋 Información Específica"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Para Ventas -->
+                <TextView
+                    android:id="@+id/textViewPrecioUnitario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Precio: $250.00"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewCliente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cliente: María González"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewFactura"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Factura: FAC-001"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
+
+                <!-- Para Mermas -->
+                <TextView
+                    android:id="@+id/textViewMotivo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Motivo: Producto vencido"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Descripción: Producto encontrado vencido durante inventario"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
+
+                <!-- Para Traspasos -->
+                <TextView
+                    android:id="@+id/textViewAlmacenDestino"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Destino: ALM001"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewNumeroTraspaso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="N° Traspaso: TRS-001"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <!-- Estado de auditoría -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_background_salidas"
+                android:backgroundTint="@color/gris_perla_claro"
+                android:padding="16dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔍 Estado de Auditoría"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/textViewEstatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="⏳ Pendiente de auditoría"
+                    android:textColor="@color/pendiente"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="@drawable/background_estado_auditoria" />
+
+            </LinearLayout>
+
+            <!-- Botones de auditoría -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/buttonMarcarAuditado"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="✅ Marcar como\nAuditado"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/rounded_background_salidas"
+                    android:backgroundTint="@color/verde_salvia"
+                    android:padding="12dp" />
+
+                <Button
+                    android:id="@+id/buttonReportarInconsistencia"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="❌ Reportar\nInconsistencia"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/rounded_background_salidas"
+                    android:backgroundTint="@color/rojo_vino_tenue"
+                    android:padding="12dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -15,4 +15,21 @@
     <color name="oro_muy_claro">#F9F5E8</color>
     <color name="gris_perla">#E0E0E0</color>
     <color name="gris_medio">#757575</color>
+
+    <!-- Colores para auditoría de salidas (usando tu paleta existente) -->
+    <color name="gray">#757575</color> <!-- Alias para gris_medio -->
+    <color name="green">#9DBF9E</color> <!-- Alias para verde_salvia -->
+    <color name="red">#B75D69</color> <!-- Alias para rojo_vino_tenue -->
+    <color name="orange">#D4AF37</color> <!-- Usando oro_palido para estados pendientes -->
+    <color name="blue">#B497BD</color> <!-- Usando lavanda_suave para traspasos -->
+
+    <!-- Estados de auditoría (usando tus colores existentes) -->
+    <color name="pendiente">#D4AF37</color> <!-- oro_palido para pendiente -->
+    <color name="auditado">#9DBF9E</color> <!-- verde_salvia para auditado -->
+    <color name="inconsistencia">#B75D69</color> <!-- rojo_vino_tenue para inconsistencia -->
+
+    <!-- Tipos de salida (usando tu paleta) -->
+    <color name="venta">#9DBF9E</color> <!-- verde_salvia -->
+    <color name="merma">#B75D69</color> <!-- rojo_vino_tenue -->
+    <color name="traspaso">#B497BD</color> <!-- lavanda_suave -->
 </resources>

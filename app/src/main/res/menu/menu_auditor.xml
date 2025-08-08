@@ -13,10 +13,18 @@
         android:id="@+id/nav_stock"
         android:title="Stock"
         android:icon="@drawable/ic_stock" />
+
+    <item
+        android:id="@+id/nav_salidas"
+        android:title="Salidas"
+        android:icon="@drawable/ic_salida" />
+
     <item
         android:id="@+id/nav_perfil"
         android:title="Perfil"
         android:icon="@drawable/ic_perfil" />
+
+
 
     <item
         android:id="@+id/nav_opcion3"

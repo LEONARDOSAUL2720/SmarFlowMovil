@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="35dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gris_perla_claro"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Encabezado -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📤 Auditoría de Salidas"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- SECCIÓN: Búsqueda Específica -->
+            <LinearLayout
+                android:id="@+id/container_busqueda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:elevation="2dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="2dp"
+                android:clipToPadding="false"
+                android:backgroundTint="@color/white"
+                android:radius="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔍 Buscar Salida Específica"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="12dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Nombre del perfume o ID de salida"
+                    android:textColorHint="@color/gris_medio">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_busqueda_salida"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_buscar_salida"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🔎 Buscar Salida"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/lavanda_suave"
+                    android:elevation="2dp"
+                    android:padding="12dp"/>
+            </LinearLayout>
+
+            <!-- SECCIÓN: Lista de Salidas -->
+            <LinearLayout
+                android:id="@+id/container_lista_salidas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:elevation="2dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="2dp"
+                android:clipToPadding="false"
+                android:backgroundTint="@color/white"
+                android:radius="12dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📋 Lista de Salidas"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Filtros para la lista -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_filtro_tipo"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/spinner_background"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="32dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_filtro_almacen"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/spinner_background"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="32dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"/>
+
+                </LinearLayout>
+
+                <!-- Botones de control -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btn_cargar_salidas"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="🔄 Cargar Salidas"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/verde_salvia"
+                        android:elevation="2dp"
+                        android:padding="8dp"/>
+
+                    <Button
+                        android:id="@+id/btn_limpiar_filtros_lista"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="🗑️ Limpiar Filtros"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/rojo_vino_tenue"
+                        android:elevation="2dp"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+                <!-- Información de resultados -->
+                <TextView
+                    android:id="@+id/tv_info_salidas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Listo para cargar salidas..."
+                    android:textColor="@color/verde_salvia"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/gris_perla_claro"
+                    android:padding="8dp"
+                    android:radius="8dp"/>
+
+                <!-- ProgressBar para lista -->
+                <ProgressBar
+                    android:id="@+id/progress_bar_lista"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"/>
+
+                <!-- RecyclerView para mostrar las salidas -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_salidas"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginBottom="12dp"
+                    android:nestedScrollingEnabled="true"
+                    android:scrollbars="vertical"/>
+
+                <!-- Controles de paginación -->
+                <LinearLayout
+                    android:id="@+id/layout_paginacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btn_pagina_anterior"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◀ Anterior"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/lavanda_suave"
+                        android:layout_marginEnd="16dp"
+                        android:padding="8dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_pagina_actual"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Página 1 de 1"
+                        android:textColor="@color/gris_oscuro"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginHorizontal="16dp"/>
+
+                    <Button
+                        android:id="@+id/btn_pagina_siguiente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Siguiente ▶"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/lavanda_suave"
+                        android:layout_marginStart="16dp"
+                        android:padding="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- SECCIÓN: Detalles Completos de Salida (inicialmente oculto) -->
+            <LinearLayout
+                android:id="@+id/container_detalles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Botón para volver a la lista -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start"
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btn_volver_lista"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◀ Volver a Lista"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/gris_oscuro"
+                        android:elevation="2dp"
+                        android:padding="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📤 Detalles Completos de Salida"
+                        android:textColor="@color/lavanda_suave"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="8dp"/>
+
+                </LinearLayout>
+
+                <!-- Tarjeta Información Principal de Salida -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:elevation="2dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:clipToPadding="false"
+                    android:backgroundTint="@color/white"
+                    android:radius="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📤 Información de Salida"
+                        android:textColor="@color/lavanda_suave"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_id_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ID: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_nombre_perfume_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Perfume: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_almacen_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Almacén de salida: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_cantidad_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_tipo_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo: "
+                        android:textColor="@color/lavanda_suave"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_fecha_salida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha de salida: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_usuario_registro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Registrado por: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_fecha_actualizacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Última actualización: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="12sp"/>
+
+                </LinearLayout>
+
+                <!-- Tarjeta de Información del Usuario -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:elevation="2dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:clipToPadding="false"
+                    android:backgroundTint="@color/white"
+                    android:radius="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="👤 Usuario Responsable"
+                        android:textColor="@color/lavanda_suave"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_nombre_usuario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_email_usuario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_rol_usuario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rol: "
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+                <!-- Tarjeta de Resumen y Estadísticas -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:elevation="2dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:clipToPadding="false"
+                    android:backgroundTint="@color/white"
+                    android:radius="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📊 Resumen de la Operación"
+                        android:textColor="@color/lavanda_suave"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- Información contextual según tipo -->
+                    <LinearLayout
+                        android:id="@+id/layout_info_venta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💰 Información de Venta"
+                            android:textColor="@color/verde_salvia"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_impacto_venta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="• Operación de venta exitosa\n• Stock reducido correctamente\n• Impacto positivo en ingresos"
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_info_merma"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📉 Información de Merma"
+                            android:textColor="@color/rojo_vino_tenue"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_impacto_merma"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="• Producto dado de baja por deterioro\n• Requiere evidencia fotográfica\n• Impacto en pérdidas operacionales"
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Estado general -->
+                    <TextView
+                        android:id="@+id/tv_estado_operacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estado: Operación completada"
+                        android:textColor="@color/verde_salvia"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp"/>
+
+                </LinearLayout>
+
+                <!-- Botones de Acción (específicos para auditores) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="24dp">
+
+                    <!-- Botón para validar salida (si aplica) -->
+                    <Button
+                        android:id="@+id/btn_validar_salida"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="✅ Marcar como Auditada"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/verde_salvia"
+                        android:layout_marginBottom="8dp"
+                        android:elevation="2dp"
+                        android:padding="12dp"/>
+
+                    <!-- Botón para reportar inconsistencia -->
+                    <Button
+                        android:id="@+id/btn_reportar_inconsistencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="⚠️ Reportar Inconsistencia"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/rojo_vino_tenue"
+                        android:elevation="2dp"
+                        android:padding="12dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header con número de salida -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/textViewNumeroSalida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SAL-001"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <!-- TextView de estatus oculto ya que no existe ese dato -->
+            <TextView
+                android:id="@+id/textViewEstatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⏳ Pendiente"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!-- Información principal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewPerfume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Carolina Herrera 212"
+                    android:textColor="@color/gris_oscuro"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/textViewCantidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="40 uds"
+                    android:textColor="@color/gris_medio"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📦 Merma"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <!-- Información secundaria -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/textViewAlmacen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🏪 ALM003"
+                android:textColor="@color/gris_medio"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="07/08/2025 05:07"
+                android:textColor="@color/gris_medio"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <!-- Valor o información adicional -->
+        <TextView
+            android:id="@+id/textViewValor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="💰 $1,250.00"
+            android:textColor="@color/verde_salvia"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="end"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
