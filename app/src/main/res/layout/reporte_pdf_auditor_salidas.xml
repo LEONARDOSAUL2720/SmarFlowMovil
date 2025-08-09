@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gris_perla_claro"
+    android:padding="16dp"
+    android:layout_marginTop="35dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Encabezado -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📦 Reporte PDF de Salidas"
+                android:textColor="@color/lavanda_suave"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- SECCIÓN: Configuración de Reporte -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:elevation="3dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙️ Configuración del Reporte PDF de Salidas"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Fechas en una fila -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Fecha Desde -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📅 Fecha Desde"
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <Button
+                            android:id="@+id/btn_fecha_desde_salidas_pdf"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:text="Seleccionar"
+                            android:textColor="@color/gris_oscuro"
+                            android:background="@drawable/spinner_background"
+                            android:gravity="center_vertical|start"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:drawableEnd="@drawable/ic_calendar"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Fecha Hasta -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📅 Fecha Hasta"
+                            android:textColor="@color/gris_oscuro"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <Button
+                            android:id="@+id/btn_fecha_hasta_salidas_pdf"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:text="Seleccionar"
+                            android:textColor="@color/gris_oscuro"
+                            android:background="@drawable/spinner_background"
+                            android:gravity="center_vertical|start"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:drawableEnd="@drawable/ic_calendar"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Tipo de Salida -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏷️ Tipo de Salida"
+                    android:textColor="@color/gris_oscuro"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <Spinner
+                    android:id="@+id/spinner_tipo_salida_pdf"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/spinner_background"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Tipo de Reporte -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Tipo de Reporte"
+                    android:textColor="@color/gris_oscuro"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <Spinner
+                    android:id="@+id/spinner_tipo_reporte_salidas_pdf"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/spinner_background"
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- Botón Generar -->
+                <Button
+                    android:id="@+id/btn_generar_reporte_salidas_pdf"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="🚀 Generar Reporte PDF de Salidas"
+                    android:textColor="@color/white"
+                    android:background="@drawable/bg_button_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!-- Estado del Reporte -->
+            <TextView
+                android:id="@+id/tv_estado_reporte_salidas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Seleccione fechas y genere el reporte de salidas"
+                android:textColor="@color/gris_oscuro"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:padding="12dp"
+                android:background="@color/white"
+                android:layout_marginBottom="16dp"
+                android:elevation="2dp"/>
+
+            <!-- Progress Bar -->
+            <ProgressBar
+                android:id="@+id/progress_bar_salidas_pdf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Vista Previa del PDF -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:elevation="3dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👁️ Vista Previa del Reporte de Salidas"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants">
+
+                    <WebView
+                        android:id="@+id/webview_preview_salidas"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:background="@color/white"
+                        android:scrollbars="vertical|horizontal"
+                        android:scrollbarStyle="insideOverlay"
+                        android:fadeScrollbars="false"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="always"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"/>
+
+                    <TextView
+                        android:id="@+id/tv_placeholder_preview_salidas"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="📦\n\nAquí aparecerá la vista previa de su reporte PDF de salidas\nuna vez que haga clic en 'Generar Reporte PDF de Salidas'"
+                        android:textColor="@color/gris_oscuro"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:background="#f8f9fa"
+                        android:visibility="visible"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <!-- Botones de Acción -->
+            <LinearLayout
+                android:id="@+id/layout_botones_salidas_pdf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:elevation="3dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📁 Acciones del Reporte de Salidas"
+                    android:textColor="@color/lavanda_suave"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_descargar_salidas_pdf"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="📥 Descargar PDF"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_button_success"
+                        android:textSize="14sp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Button
+                        android:id="@+id/btn_compartir_salidas_pdf"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="📤 Compartir PDF"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_button_info"
+                        android:textSize="14sp"
+                        android:layout_marginStart="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
