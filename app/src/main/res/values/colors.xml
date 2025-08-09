@@ -32,4 +32,19 @@
     <color name="venta">#9DBF9E</color> <!-- verde_salvia -->
     <color name="merma">#B75D69</color> <!-- rojo_vino_tenue -->
     <color name="traspaso">#B497BD</color> <!-- lavanda_suave -->
+
+    <!-- Colores primarios para el reporte PDF -->
+    <color name="primary_color">#B497BD</color> <!-- lavanda_suave -->
+    <color name="accent_color">#D4AF37</color> <!-- oro_palido -->
+    <color name="success_color">#9DBF9E</color> <!-- verde_salvia -->
+    <color name="error_color">#B75D69</color> <!-- rojo_vino_tenue -->
+
+    <!-- Colores de texto -->
+    <color name="text_primary">#2C2C2C</color> <!-- gris_oscuro -->
+    <color name="text_secondary">#757575</color> <!-- gris_medio -->
+
+    <!-- Colores de fondo -->
+    <color name="background_light">#F4F4F4</color> <!-- gris_perla_claro -->
+    <color name="card_background">#FFFFFF</color>
+
 </resources>

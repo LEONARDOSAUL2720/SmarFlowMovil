@@ -24,6 +24,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
+
 class MainAuditorActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
@@ -209,6 +210,16 @@ class MainAuditorActivity : AppCompatActivity() {
                 }
                 R.id.nav_salidas -> {
                     val intent = Intent(this, SalidasAuditor::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_reporte_salidas -> {
+                    val intent = Intent(this, ReporteSalidasAuditor::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.nav_reporte_entradas -> {
+                    val intent = Intent(this, ReporteEntradasAuditor::class.java)
                     startActivity(intent)
                     true
                 }

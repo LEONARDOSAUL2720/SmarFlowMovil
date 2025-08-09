@@ -14,7 +14,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,20 +36,27 @@ android {
 }
 
 dependencies {
-
+    // Core Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("com.android.volley:volley:1.2.1")
-    implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
-    implementation("com.android.volley:volley:1.2.1")
     implementation("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
-
-
+    kapt("com.github.bumptech.glide:compiler:4.15.1")
+    // Material Design (versión única)
+    implementation("com.google.android.material:material:1.10.0")
+    // Networking
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    // WebView mejorado
+    implementation("androidx.webkit:webkit:1.7.0")
+    implementation(libs.volley)
+    // JSON Processing
+    implementation("com.google.code.gson:gson:2.10.1")
+    // WebView enhanced
+    implementation("androidx.webkit:webkit:1.8.0")
+    // Fragment support (para DatePicker)
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

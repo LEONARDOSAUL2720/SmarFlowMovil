@@ -3,4 +3,18 @@
     <string name="navigation_drawer_open">Abrir menú</string>
     <string name="navigation_drawer_close">Cerrar menú</string>
     <string name="user_image">Imagen de usuario</string>
+
+    <!-- Strings para la actividad de reporte -->
+    <string name="reporte_entradas_title">Reporte de Entradas</string>
+    <string name="fecha_desde">Fecha Desde</string>
+    <string name="fecha_hasta">Fecha Hasta</string>
+    <string name="generar_reporte">Generar Reporte</string>
+    <string name="descargar_pdf">Descargar PDF</string>
+    <string name="compartir_pdf">Compartir PDF</string>
+    <string name="vista_previa">Vista Previa del Reporte</string>
+    <string name="generando_reporte">Generando reporte...</string>
+    <string name="reporte_generado">Reporte generado exitosamente</string>
+    <string name="error_generar_reporte">Error al generar el reporte</string>
+    <string name="pdf_guardado">PDF guardado exitosamente</string>
+    <string name="error_guardar_pdf">Error al guardar PDF</string>
 </resources>
