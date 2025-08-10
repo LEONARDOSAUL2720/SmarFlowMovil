@@ -223,11 +223,7 @@ class MainAuditorActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.nav_perfil -> {
-                    val intent = Intent(this, Perfil::class.java)
-                    startActivity(intent)
-                    true
-                }
+
                 else -> false
             }
         }

@@ -29,11 +29,6 @@
         android:title="Reporte Entradas"
         android:icon="@drawable/ic_reporte_entradas" />
 
-    <item
-        android:id="@+id/nav_perfil"
-        android:title="Perfil"
-        android:icon="@drawable/ic_perfil" />
-
 
 
     <item
